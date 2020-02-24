@@ -4,10 +4,10 @@ import json
 import math
 import zz_init
 import time
-#from os import path
+from os import path
 #from discord.ext import commands
 #from discord.utils import get
-#from shutil import copyfile
+from shutil import copyfile
 
 async def cmndhelp(message):
     await message.channel.send("""```
