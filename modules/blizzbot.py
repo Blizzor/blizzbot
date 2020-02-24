@@ -239,7 +239,15 @@ async def on_member_update(before,after):
 
 @bot.event
 async def on_voice_state_update(member, before, after):
+
     channels = (member.guild.voice_channels)
+    for j in channels:
+        if j.name == "Stream-Channel": # Wenn Kategory richtig ist
+            if not j.members:
+                await j.delete()
+
+    channels = (member.guild.voice_channels)
+
     emptychannels = False
     cpchannel = channels[0]
     for j in channels:
