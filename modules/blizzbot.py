@@ -107,6 +107,7 @@ async def syncwhitelist(ctx):
 async def zz(ctx):
     if ctx.message.channel.id == IDchannelverificate:
         member = discord.utils.find(lambda m: m.id == IDgrpverificate, ctx.author.roles)
+        await ctx.message.delete()
         await ctx.author.create_dm()
         if not member:
             grpverify = ctx.guild.get_role(IDgrpverificate)
@@ -114,7 +115,7 @@ async def zz(ctx):
             await ctx.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
         else:
             await ctx.author.dm_channel.send("Du bist bereits freigeschalten!")
-        await ctx.message.delete()
+
 
 @bot.command()
 async def sd(ctx):
