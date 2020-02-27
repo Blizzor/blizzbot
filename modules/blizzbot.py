@@ -21,8 +21,6 @@ from discord.ext import commands
 from discord.utils import get
 #from shutil import copyfile
 
-
-
 zz_init.logger()
 
 token = zz_init.config().get_token()
@@ -34,6 +32,7 @@ IDgrpverificate = zz_init.config().get_IDgrpverificate()
 IDgrpYT = zz_init.config().get_IDgrpYT()
 IDgrpYTGold = zz_init.config().get_IDgrpYTGold()
 IDgrpYTDiamant = zz_init.config().get_IDgrpYTDiamant()
+ArrayIDgrpsubserver = zz_init.config().get_ArrayIDgrpsubserver()
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True, help_command=None)
 
@@ -65,6 +64,7 @@ async def help(ctx):
         await zz_functions.cmndhelp(ctx.message)
 
 @bot.command()
+#@commands.check(zz_functions.is_verified)
 async def mc(ctx, arg=None):
     if ctx.message.channel.id == IDchannelcommand:
         if arg:
@@ -208,16 +208,15 @@ async def on_member_update(before,after):
     checksubrole = False
     checkgoldrole = False
 
-    for i in after.roles:               #Pruefe ob Youtube Subscriber
-        if i.id == IDgrpYT:
-            checksubrole = True
-        if i.id == IDgrpYTGold:
-            checkgoldrole = True
+    if await zz_functions.checkrole(after.roles, IDgrpYT):
+        checksubrole = True
+
+    if await zz_functions.checkrole(after.roles, IDgrpYTGold):
+        checkgoldrole = True
+
     if not checkgoldrole and checksubrole:#Wenn kein YT-Gold
         await after.add_roles(after.guild.get_role(IDgrpYTDiamant))
-#        for k in bot.guilds[0].roles:
-#            if k.id == IDgrpYTDiamant:
-#                await after.add_roles(k)
+
     if not checksubrole:
         for l in after.roles:
             if l.id == IDgrpYTDiamant or l.id == IDgrpYTGold:
@@ -226,13 +225,15 @@ async def on_member_update(before,after):
     wlrole = False
     roles = after.roles
     for i in roles:
-        if i.id == IDgrpYTDiamant:
-            wlrole = True
-        sql = "UPDATE mcnames SET isWhitelisted = %s WHERE discord_id = %s"
-        val = (wlrole, after.id)
+        for j in ArrayIDgrpsubserver:
+            if i.id == j:
+                wlrole = True
+                print("TRUE")
+    sql = "UPDATE mcnames SET isWhitelisted = %s WHERE discord_id = %s"
+    val = (wlrole, after.id)
 
-        mycursor.execute(sql, val)
-        mydb.commit()
+    mycursor.execute(sql, val)
+    mydb.commit()
 
     await zz_functions.syncwhitelist()
 

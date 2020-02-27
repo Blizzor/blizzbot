@@ -9,6 +9,8 @@ from os import path
 #from discord.utils import get
 from shutil import copyfile
 
+IDgrpverificate = zz_init.config().get_IDgrpverificate()
+
 async def cmndhelp(message):
     await message.channel.send("""```
 !mc [Name] - Registriere deinen Minecraft-Account
@@ -297,3 +299,13 @@ async def getmemberid(message, name):
         if member.name == name:
             ID = member.id
     return ID
+
+async def checkrole(roles, roleid):
+    for i in roles:
+        if i.id == roleid:
+            return True
+    return False
+
+#async def is_verified(ctx):
+#    check = await checkrole(ctx.author.roles, IDgrpverificate)
+#    return check
