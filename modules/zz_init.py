@@ -8,7 +8,7 @@ import mysql.connector
 
 class config():
     def __init__(self):
-        with open('../config/config.json') as json_file:
+        with open('config/config.json') as json_file:
             jsonstructure = json.load(json_file)
             for p in jsonstructure['discord']:
                 self.token = p['token']
@@ -66,7 +66,7 @@ mydb = mysql.connector.connect(
 def logger():
     day = datetime.datetime.now()
 
-    logfile = '../logs/discord' + '_' + str(day.year) + '_' + str(day.month) + '_' + str(day.day) + '.log'
+    logfile = 'logs/discord' + '_' + str(day.year) + '_' + str(day.month) + '_' + str(day.day) + '.log'
     logger = logging.getLogger('discord')
     logger.setLevel(logging.WARNING)
     handler = logging.FileHandler(filename=logfile, encoding='utf-8', mode='w')

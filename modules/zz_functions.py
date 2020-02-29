@@ -2,7 +2,7 @@ import discord
 import requests
 import json
 import math
-import zz_init
+from modules import zz_init
 import time
 from os import path
 #from discord.ext import commands
@@ -227,13 +227,13 @@ async def cmndstreamchannel(message):
     await cpchannel.clone(name="Stream-Channel")
     channels = (message.author.guild.voice_channels)
     anzahl = len(channels) - 1 # -1, da Liste ab 0 beginnt
-    print(anzahl)
+    #print(anzahl)
     await message.author.move_to(channels[anzahl])
 
     return
 
 async def cmndwhitelist(message):
-    with open('../whitelist/whitelist.json') as json_file:
+    with open('whitelist/whitelist.json') as json_file:
         data = json.load(json_file)
         text = "**Datei-Inhalt: **\n"
         for p in data:
@@ -279,13 +279,13 @@ async def syncwhitelist():
                 'name': x[0]
                 })
 
-    with open('../whitelist/whitelist.json', 'w') as outfile:
+    with open('whitelist/whitelist.json', 'w') as outfile:
         json.dump(whitelist,outfile, indent=2)
 
     #Kopiere Whitelist in verschiedene Ordner
-    paths = open("../whitelist/paths.txt", "r")
+    paths = open("whitelist/paths.txt", "r")
     for line in paths:
-        copyfile('../whitelist/whitelist.json', str(line.rstrip()) + 'whitelist.json')
+        copyfile('whitelist/whitelist.json', str(line.rstrip()) + 'whitelist.json')
     paths.close()
 
     return

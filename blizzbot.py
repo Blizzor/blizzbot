@@ -7,13 +7,16 @@ import discord
 #import os
 #import math
 #test
-import zz_setup
+#import zz_setup
+from modules import zz_setup
+from modules import zz_init
 
-zz_setup.checkfiles()
+#zz_setup.checkfiles()
 
-import zz_init
-import zz_functions
+#import zz_init
+from modules import zz_functions
 #import mysql.connector
+
 
 from random import randrange
 #from os import path
@@ -36,14 +39,20 @@ ArrayIDgrpsubserver = zz_init.config().get_ArrayIDgrpsubserver()
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True, help_command=None)
 
+initial_extensions = ['cogs.user',
+                      'cogs.mod']
+
+if __name__ == '__main__': #Wenn Datei als Hauptdatei aufgerufen wird
+    for extension in initial_extensions:
+        bot.load_extension(extension)
+
 @bot.event
 async def on_ready():
-#    print(discord)
     print('Bot wurde gestartet')
-
-@bot.command()
-async def test(ctx, arg="null"):
-    print(ctx.message.raw_mentions)
+#
+#@bot.command()
+#async def test(ctx, arg="null"):
+#    print(ctx.message.raw_mentions)
 #    print(ctx.message)
 #    print(arg)
 #   embed=discord.Embed()
@@ -59,12 +68,6 @@ async def test(ctx, arg="null"):
 #    #print(arg)
 
 @bot.command()
-async def help(ctx):
-    if ctx.message.channel.id == IDchannelcommand:
-        await zz_functions.cmndhelp(ctx.message)
-
-@bot.command()
-#@commands.check(zz_functions.is_verified)
 async def mc(ctx, arg=None):
     if ctx.message.channel.id == IDchannelcommand:
         if arg:
@@ -73,100 +76,9 @@ async def mc(ctx, arg=None):
             await zz_functions.cmndmc(ctx.message, bot)
 
 @bot.command()
-async def mcname(ctx, arg=None):
-    if ctx.message.channel.id == IDchannelcommand:
-        if arg:
-            await zz_functions.cmndmcname(ctx.message, arg)
-        else:
-            await zz_functions.cmndmcname(ctx.message)
-
-@bot.command()
-async def rank(ctx, arg=None):
-    if ctx.message.channel.id == IDchannelcommand:
-        if arg:
-            await zz_functions.cmndrank(ctx.message, arg)
-        else:
-            await zz_functions.cmndrank(ctx.message)
-
-@bot.command()
-async def ranking(ctx):
-    if ctx.message.channel.id == IDchannelcommand:
-        await zz_functions.cmndranking(ctx.message)
-
-@bot.command()
-async def streamchannel(ctx):
-    if ctx.message.channel.id == IDchannelcommand:
-        await zz_functions.cmndstreamchannel(ctx.message)
-
-@bot.command()
-async def syncwhitelist(ctx):
-    if ctx.message.channel.id == IDchanneladmin:
-        await zz_functions.syncwhitelist()
-
-@bot.command()
-async def zz(ctx):
-    if ctx.message.channel.id == IDchannelverificate:
-        member = discord.utils.find(lambda m: m.id == IDgrpverificate, ctx.author.roles)
-        await ctx.message.delete()
-        await ctx.author.create_dm()
-        if not member:
-            grpverify = ctx.guild.get_role(IDgrpverificate)
-            await ctx.author.add_roles(grpverify)
-            await ctx.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
-        else:
-            await ctx.author.dm_channel.send("Du bist bereits freigeschalten!")
-
-
-@bot.command()
-async def sd(ctx):
-    if ctx.message.channel.id == IDchanneladmin:
-        await zz_functions.cmndshutdown(bot)
-
-@bot.command()
-async def checkwhitelist(ctx):
-    if ctx.message.channel.id == IDchanneladmin:
-        await zz_functions.cmndwhitelist(ctx.message)
-
-@bot.command()
 async def checkdb(ctx):
     if ctx.message.channel.id == IDchanneladmin:
         await zz_functions.cmndcheckdb(ctx.message,bot)
-
-@bot.command()
-async def amazon(ctx):
-    await ctx.message.channel.send("https://www.amazon.de/shop/blizzor")
-
-@bot.command()
-async def equipment(ctx):
-    await ctx.message.channel.send("https://www.amazon.de/shop/blizzor")
-
-@bot.command()
-async def youtube(ctx):
-    await ctx.message.channel.send("https://www.youtube.com/Blizzor")
-
-@bot.command()
-async def twitter(ctx):
-    await ctx.message.channel.send("https://www.blizzor.de/twitter")
-
-@bot.command()
-async def twitch(ctx):
-    await ctx.message.channel.send("https://www.blizzor.de/twitch")
-
-@bot.command()
-async def facebook(ctx):
-    await ctx.message.channel.send("https://www.blizzor.de/facebook")
-
-@bot.command()
-async def instagram(ctx):
-    await ctx.message.channel.send("https://www.blizzor.de/instagram")
-
-@bot.command()
-async def reloadcommand(ctx, arg):
-    # vllt get_command(name)
-    #remove_command(arg)
-    #add_command(arg)
-    #bot.reload_extension(arg)
-    pass
 
 @bot.event
 async def on_message(message):
