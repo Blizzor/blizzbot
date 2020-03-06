@@ -1,3 +1,4 @@
+#!/usr/bin/python3.8
 import discord
 
 from modules import zz_setup
@@ -9,7 +10,7 @@ from random import randrange
 from discord.ext import commands
 from discord.utils import get
 
-#!/usr/bin/python3.8
+
 
 zz_init.logger()
 
