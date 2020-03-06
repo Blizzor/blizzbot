@@ -5,8 +5,6 @@ import math
 from modules import zz_init
 import time
 from os import path
-#from discord.ext import commands
-#from discord.utils import get
 from shutil import copyfile
 
 IDgrpverificate = zz_init.config().get_IDgrpverificate()

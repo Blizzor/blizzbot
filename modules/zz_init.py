@@ -1,10 +1,7 @@
-#import os
-#import os.path
 import json
 import datetime
 import logging
 import mysql.connector
-#from os import path
 
 class config():
     def __init__(self):
@@ -16,6 +13,7 @@ class config():
                 self.IDchannelcommand = p['IDchannelcommand']
                 self.IDchannelverificate = p['IDchannelverificate']
                 self.IDchanneladmin = p['IDchanneladmin']
+                self.IDchannellogs = p['IDchannellogs']
                 self.IDgrpverificate = p['IDgrpverificate']
                 self.IDgrpYT = p['IDgrpYT']
                 self.IDgrpYTGold = p['IDgrpYTGold']
@@ -36,6 +34,8 @@ class config():
         return self.IDchannelverificate
     def get_IDchanneladmin(self):
         return self.IDchanneladmin
+    def get_IDchannellogs(self):
+        return self.IDchannellogs
     def get_IDgrpverificate(self):
         return self.IDgrpverificate
     def get_IDgrpYT(self):

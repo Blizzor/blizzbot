@@ -1,9 +1,5 @@
 import os
-#import os.path
 import json
-#import datetime
-#import logging
-#import mysql.connector
 from os import path
 
 def checkfiles():

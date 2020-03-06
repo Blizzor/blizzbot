@@ -1,28 +1,15 @@
 import discord
-#import requests
-#import json
-#import os.path
-#import logging
-#import datetime
-#import os
-#import math
-#test
-#import zz_setup
+
 from modules import zz_setup
 from modules import zz_init
-
-#zz_setup.checkfiles()
-
-#import zz_init
 from modules import zz_functions
-#import mysql.connector
-
 
 from random import randrange
-#from os import path
+
 from discord.ext import commands
 from discord.utils import get
-#from shutil import copyfile
+
+#!/usr/bin/python3.8
 
 zz_init.logger()
 
@@ -31,6 +18,7 @@ IDcategoryvoice = zz_init.config().get_IDcategoryvoice()
 IDchannelcommand = zz_init.config().get_IDchannelcommand()
 IDchannelverificate = zz_init.config().get_IDchannelverificate()
 IDchanneladmin = zz_init.config().get_IDchanneladmin()
+IDchannellogs = zz_init.config().get_IDchannellogs()
 IDgrpverificate = zz_init.config().get_IDgrpverificate()
 IDgrpYT = zz_init.config().get_IDgrpYT()
 IDgrpYTGold = zz_init.config().get_IDgrpYTGold()
