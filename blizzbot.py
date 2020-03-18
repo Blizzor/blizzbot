@@ -78,7 +78,7 @@ async def on_message(message):
 
     if message.author != bot.user and message.guild and message.channel.id != IDchannelcommand:
         await zz_functions.getexp(message)
-        number = randrange(0,200)
+        number = randrange(0,1000)
         if(number == 5):
             await message.add_reaction('<:ZZBlizzor:493814042780237824>')
 
@@ -106,30 +106,31 @@ async def on_member_update(before,after):
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()
 
-    checksubrole = False
-    checkgoldrole = False
+    #checksubrole = False
+    #checkgoldrole = False
 
-    if await zz_functions.checkrole(after.roles, IDgrpYT):
-        checksubrole = True
+    #if await zz_functions.checkrole(after.roles, IDgrpYT):
+    #    checksubrole = True
 
-    if await zz_functions.checkrole(after.roles, IDgrpYTGold):
-        checkgoldrole = True
+    #if await zz_functions.checkrole(after.roles, IDgrpYTDiamant):
+    #    checkgoldrole = True
 
-    if not checkgoldrole and checksubrole:#Wenn kein YT-Gold
-        await after.add_roles(after.guild.get_role(IDgrpYTDiamant))
+    #if not checkgoldrole and checksubrole:#Wenn kein YT-Gold
+    #    await after.add_roles(after.guild.get_role(IDgrpYTDiamant))
 
-    if not checksubrole:
-        for l in after.roles:
-            if l.id == IDgrpYTDiamant or l.id == IDgrpYTGold:
-                await after.remove_roles(l)
+    #if not checksubrole:
+    #    for l in after.roles:
+    #        if l.id == IDgrpYTDiamant or l.id == IDgrpYTGold:
+    #            await after.remove_roles(l)
 
+    #wlrole = False
+    #roles = after.roles
+    #for i in roles:
     wlrole = False
-    roles = after.roles
-    for i in roles:
-        for j in ArrayIDgrpsubserver:
-            if i.id == j:
-                wlrole = True
-                print("TRUE")
+    for i in ArrayIDgrpsubserver:
+        if await zz_functions.checkrole(after.roles, i):
+            wlrole = True
+
     sql = "UPDATE mcnames SET isWhitelisted = %s WHERE discord_id = %s"
     val = (wlrole, after.id)
 
