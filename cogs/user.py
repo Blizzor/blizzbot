@@ -11,7 +11,7 @@ class MembersCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=["hilfe"])
     @commands.guild_only()
     async def help(self, ctx):
         if ctx.message.channel.id == IDchannelcommand:
@@ -26,7 +26,7 @@ class MembersCog(commands.Cog):
 #            else:
 #                await zz_functions.cmndmc(ctx.message, commands.Bot)
 
-    @commands.command()
+    @commands.command(aliases=["minecraftname"])
     @commands.guild_only()
     async def mcname(self, ctx, arg=None):
         if ctx.message.channel.id == IDchannelcommand:
@@ -35,7 +35,7 @@ class MembersCog(commands.Cog):
             else:
                 await zz_functions.cmndmcname(ctx.message)
 
-    @commands.command()
+    @commands.command(aliases=["rang"])
     @commands.guild_only()
     async def rank(self, ctx, arg=None):
         if ctx.message.channel.id == IDchannelcommand:
@@ -44,7 +44,7 @@ class MembersCog(commands.Cog):
             else:
                 await zz_functions.cmndrank(ctx.message)
 
-    @commands.command()
+    @commands.command(aliases=["rangliste"])
     @commands.guild_only()
     async def ranking(self, ctx):
         if ctx.message.channel.id == IDchannelcommand:
@@ -80,7 +80,7 @@ class MembersCog(commands.Cog):
     async def equipment(self, ctx):
         await ctx.message.channel.send("https://www.amazon.de/shop/blizzor")
 
-    @commands.command()
+    @commands.command(aliases=["yt"])
     @commands.guild_only()
     async def youtube(self, ctx):
         await ctx.message.channel.send("https://www.youtube.com/Blizzor")

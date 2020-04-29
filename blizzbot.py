@@ -56,7 +56,7 @@ async def on_ready():
 #    #print(ctx)
 #    #print(arg)
 
-@bot.command()
+@bot.command(aliases=["minecraft"])
 async def mc(ctx, arg=None):
     if ctx.message.channel.id == IDchannelcommand:
         if arg:
@@ -64,7 +64,7 @@ async def mc(ctx, arg=None):
         else:
             await zz_functions.cmndmc(ctx.message, bot)
 
-@bot.command()
+@bot.command(aliases=["checkdatabase"])
 async def checkdb(ctx):
     if ctx.message.channel.id == IDchanneladmin:
         await zz_functions.cmndcheckdb(ctx.message,bot)
@@ -72,6 +72,10 @@ async def checkdb(ctx):
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
+
+    if "http" in message.content:
+        await message.delete()
+
     if message.channel.id == IDchannelverificate and message.content != "!zz":
         await message.delete()
 
@@ -106,26 +110,6 @@ async def on_member_update(before,after):
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()
 
-    #checksubrole = False
-    #checkgoldrole = False
-
-    #if await zz_functions.checkrole(after.roles, IDgrpYT):
-    #    checksubrole = True
-
-    #if await zz_functions.checkrole(after.roles, IDgrpYTDiamant):
-    #    checkgoldrole = True
-
-    #if not checkgoldrole and checksubrole:#Wenn kein YT-Gold
-    #    await after.add_roles(after.guild.get_role(IDgrpYTDiamant))
-
-    #if not checksubrole:
-    #    for l in after.roles:
-    #        if l.id == IDgrpYTDiamant or l.id == IDgrpYTGold:
-    #            await after.remove_roles(l)
-
-    #wlrole = False
-    #roles = after.roles
-    #for i in roles:
     wlrole = False
     for i in ArrayIDgrpsubserver:
         if await zz_functions.checkrole(after.roles, i):
