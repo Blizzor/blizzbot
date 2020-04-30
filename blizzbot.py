@@ -25,6 +25,7 @@ IDgrpYT = zz_init.config().get_IDgrpYT()
 IDgrpYTGold = zz_init.config().get_IDgrpYTGold()
 IDgrpYTDiamant = zz_init.config().get_IDgrpYTDiamant()
 ArrayIDgrpsubserver = zz_init.config().get_ArrayIDgrpsubserver()
+ArraynoFilter = zz_init.config().get_ArraynoFilter()
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True, help_command=None)
 
@@ -72,9 +73,14 @@ async def checkdb(ctx):
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
-
-    if "http" in message.content:
-        await message.delete()
+    filter = True
+    if "http" in message.content and message.guild:
+        if await zz_functions.checkrole(message.author.roles, IDgrpverificate):
+            for i in ArraynoFilter:
+                if await zz_functions.checkrole(message.author.roles, i):
+                    filter = False
+            if filter:
+                await message.delete()
 
     if message.channel.id == IDchannelverificate and message.content != "!zz":
         await message.delete()

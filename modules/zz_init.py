@@ -19,6 +19,7 @@ class config():
                 self.IDgrpYTGold = p['IDgrpYTGold']
                 self.IDgrpYTDiamant = p['IDgrpYTDiamant']
                 self.ArrayIDgrpsubserver = p['ArrayIDgrpsubserver']
+                self.ArraynoFilter = p['ArraynoFilter']
                 self.DBhost = p['DBhost']
                 self.DBuser = p['DBuser']
                 self.DBpasswd = p['DBpasswd']
@@ -46,6 +47,8 @@ class config():
         return self.IDgrpYTDiamant
     def get_ArrayIDgrpsubserver(self):
         return self.ArrayIDgrpsubserver
+    def get_ArraynoFilter(self):
+        return self.ArraynoFilter
     def get_DBhost(self):
         return self.DBhost
     def get_DBuser(self):
