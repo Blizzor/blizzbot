@@ -13,7 +13,7 @@ class MembersCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def resetrank(self, ctx, arg=None):
-        if ctx.message.channel.id == IDchannelcommand:
+        if ctx.message.channel.id == IDchanneladmin:
             if arg:
                 await zz_functions.resetrank(ctx.message, arg)
 
