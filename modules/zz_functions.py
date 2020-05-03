@@ -263,6 +263,24 @@ async def getexp(message):
     mydb.commit()
     return
 
+async def resetrank(message, name=None):
+
+    mydb = zz_init.getdb()
+    mycursor = mydb.cursor()
+    if message.raw_mentions:
+        ID = message.raw_mentions[0]
+        sql = "UPDATE ranking SET points = %s WHERE discord_id = %s"
+        val = (0, str(ID))
+
+    elif name:
+        ID = await getmemberid(message, name)
+        sql = "UPDATE ranking SET points = %s WHERE discord_id = %s"
+        val = (0, str(ID))
+    mycursor.execute(sql, val)
+    mydb.commit()
+
+    return
+
 async def syncwhitelist():
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()
