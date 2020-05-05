@@ -156,4 +156,29 @@ async def on_voice_state_update(member, before, after):
         await cpchannel.clone(name="Channel")
     return
 
+@bot.event
+async def on_message_delete(message):
+    channel = discord.utils.get(message.guild.text_channels, id=IDchannellogs)
+    #print(channel)
+    #await channel.send(message.content)
+    #print("test")
+
+    #text="```\n"
+    embed = discord.Embed(title="Gelöschte Nachricht", color=0xedbc5d)
+    embed.set_thumbnail(url=message.author.avatar_url)
+    embed.add_field(name="Name", value=message.author.name, inline=True)
+    embed.add_field(name="Channel", value=message.channel.name, inline=True)
+    embed.add_field(name="Inhalt", value=message.content, inline=False)
+    #text += message.author.name + "\n"
+    #text += message.content + "\n"
+
+    await channel.send(embed=embed)
+
+    return
+
+#@bot.event
+#async def on_error(event):
+#    channel = discord.utils.get(bot.guild.channels, id='IDchannellogs')
+#    channel.send(event)
+
 bot.run(token)
