@@ -12,6 +12,13 @@ class MembersCog(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    async def resetuser(self, ctx, arg=None):
+        if ctx.message.channel.id == IDchanneladmin:
+            if arg:
+                await zz_functions.resetuser(ctx.message, arg)
+
+    @commands.command()
+    @commands.guild_only()
     async def resetrank(self, ctx, arg=None):
         if ctx.message.channel.id == IDchanneladmin:
             if arg:

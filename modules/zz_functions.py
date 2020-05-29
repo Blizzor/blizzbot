@@ -281,6 +281,22 @@ async def resetrank(message, name=None):
 
     return
 
+async def resetuser(message, name=None):
+
+    mydb = zz_init.getdb()
+    mycursor = mydb.cursor()
+    sql = "DELETE FROM mcnames WHERE discord_id = " + str(name)
+
+    mycursor.execute(sql)
+    mydb.commit()
+
+    sql = "DELETE FROM ranking WHERE discord_id = " + str(name)
+
+    mycursor.execute(sql)
+    mydb.commit()
+
+    return
+
 async def syncwhitelist():
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()

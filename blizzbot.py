@@ -112,6 +112,22 @@ async def on_member_join(member):
     return
 
 @bot.event
+async def on_member_remove(member):
+    mydb = zz_init.getdb()
+    mycursor = mydb.cursor()
+    sql = "DELETE FROM mcnames WHERE discord_id = " + str(member.id)
+
+    mycursor.execute(sql)
+    mydb.commit()
+
+    sql = "DELETE FROM ranking WHERE discord_id = " + str(member.id)
+
+    mycursor.execute(sql)
+    mydb.commit()
+
+    return
+
+@bot.event
 async def on_member_update(before,after):
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()
