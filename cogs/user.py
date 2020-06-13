@@ -105,6 +105,11 @@ class MembersCog(commands.Cog):
     async def instagram(self, ctx):
         await ctx.message.channel.send("https://www.blizzor.de/instagram")
 
+    @commands.command()
+    @commands.guild_only()
+    async def github(self, ctx):
+        await ctx.message.channel.send("https://github.com/Blizzor")
+
     @commands.command(aliases=["keinemod"])
     @commands.guild_only()
     async def keinmodpack(self, ctx):
