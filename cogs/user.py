@@ -105,5 +105,10 @@ class MembersCog(commands.Cog):
     async def instagram(self, ctx):
         await ctx.message.channel.send("https://www.blizzor.de/instagram")
 
+    @commands.command(aliases=["keinemod"])
+    @commands.guild_only()
+    async def keinmodpack(self, ctx):
+        await ctx.message.channel.send("https://youtu.be/fIujdGx0uNo")
+
 def setup(bot):
     bot.add_cog(MembersCog(bot))
