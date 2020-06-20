@@ -70,8 +70,8 @@ class MembersCog(commands.Cog):
             else:
                 await ctx.author.dm_channel.send("Du bist bereits freigeschalten!")
 
-    @commands.command()
-    @commands.guild_only(aliases=["equipment"])
+    @commands.command(aliases=["equipment"])
+    @commands.guild_only()
     async def amazon(self, ctx):
         await ctx.message.channel.send("https://www.amazon.de/shop/blizzor")
 
