@@ -75,7 +75,8 @@ class MembersCog(commands.Cog):
     async def amazon(self, ctx):
         await ctx.message.channel.send("https://www.amazon.de/shop/blizzor")
 
-    @commands.guild_only(aliases=["merchandise"])
+    @commands.command(aliases=["merchandise"])
+    @commands.guild_only()
     async def merch(self, ctx):
         await ctx.message.channel.send("https://www.elbster.de/2197-blizzor")
 
