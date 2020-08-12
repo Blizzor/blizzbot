@@ -70,6 +70,16 @@ async def checkdb(ctx):
     if ctx.message.channel.id == IDchanneladmin:
         await zz_functions.cmndcheckdb(ctx.message,bot)
 
+@bot.command()
+async def anfrage(ctx):
+    if ctx.message.channel.id == IDchannelcommand:
+        Nachricht = await zz_functions.question(ctx.message,bot)
+
+        channels = (ctx.author.guild.text_channels)
+        for j in channels:
+            if j.name == "anfragen": # Wenn Kategory richtig ist
+                await j.send(Nachricht)
+
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)

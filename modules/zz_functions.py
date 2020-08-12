@@ -13,8 +13,26 @@ async def cmndhelp(message):
     await message.channel.send("""```
 !mc [Name] - Registriere deinen Minecraft-Account
 !mcname [Name] - Gibt deinen aktuellen Minecraft-Account wieder
-!rank [Name] - Gibt Erfahrung wieder```""")
+!rank [Name] - Gibt Erfahrung wieder
+!anfrage - Schreibe dem Bot eine Anfrage, die direkt an die Moderatoren privat weitergeleitet werden```""")
     return
+
+async def question(message, client):
+#    print(message.author.dm_channel.me)
+#    print("Test1")
+#    print(message.author)
+    await message.author.create_dm()
+#    print(message.author.dm_channel)
+    await message.author.dm_channel.send(content="Bitte schreiben Sie mir Ihre Anfrage in einer Nachricht:")
+#    print("Test2")
+    author = message.author
+    def check(m):
+        return m.author == message.author
+    Nachricht = await client.wait_for('message', check=check)
+#    print(Nachricht.content);
+    await message.author.dm_channel.send("Vielen Dank für Ihre Anfrage!")
+    VolleNachricht= str(message.author) + ":  " + Nachricht.content
+    return VolleNachricht
 
 async def cmndmc(message, client, name=None):
     mydb = zz_init.getdb()

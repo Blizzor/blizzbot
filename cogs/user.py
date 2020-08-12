@@ -17,15 +17,6 @@ class MembersCog(commands.Cog):
         if ctx.message.channel.id == IDchannelcommand:
             await zz_functions.cmndhelp(ctx.message)
 
-#    @commands.command()
-#    @commands.guild_only()
-#    async def mc(self, ctx, arg=None):
-#        if ctx.message.channel.id == IDchannelcommand:
-#            if arg:
-#                await zz_functions.cmndmc(ctx.message, commands.Bot, arg)
-#            else:
-#                await zz_functions.cmndmc(ctx.message, commands.Bot)
-
     @commands.command(aliases=["minecraftname"])
     @commands.guild_only()
     async def mcname(self, ctx, arg=None):
