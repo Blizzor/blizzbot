@@ -268,15 +268,19 @@ async def getexp(message):
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()
     sql = "SELECT points FROM ranking WHERE discord_id ='" + str(message.author.id) + "'"
+    #Berechnung EXP
+    exp = (len(message.content)-2)/5
+    if(exp > 10):
+        exp = 10
     mycursor.execute(sql)
     myresult = mycursor.fetchone()
 
     if myresult:
         sql = "UPDATE ranking SET points = %s WHERE discord_id = %s"
-        val = ((myresult[0] + 5), message.author.id)
+        val = ((myresult[0] + exp), message.author.id)
     else:
         sql = "INSERT INTO ranking (discord_id, points) VALUES (%s, %s)"
-        val = (message.author.id, 5)
+        val = (message.author.id, exp)
     mycursor.execute(sql, val)
     mydb.commit()
     return
