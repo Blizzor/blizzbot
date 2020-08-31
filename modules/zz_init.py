@@ -18,7 +18,8 @@ class config():
                 self.IDgrpYT = p['IDgrpYT']
                 self.IDgrpYTGold = p['IDgrpYTGold']
                 self.IDgrpYTDiamant = p['IDgrpYTDiamant']
-                self.ArrayIDgrpsubserver = p['ArrayIDgrpsubserver']
+                self.ArrayIDgrpsubyoutube = p['ArrayIDgrpsubyoutube']
+                self.ArrayIDgrpsubtwitch = p['ArrayIDgrpsubtwitch']
                 self.ArraynoFilter = p['ArraynoFilter']
                 self.DBhost = p['DBhost']
                 self.DBuser = p['DBuser']
@@ -45,8 +46,10 @@ class config():
         return self.IDgrpYTGold
     def get_IDgrpYTDiamant(self):
         return self.IDgrpYTDiamant
-    def get_ArrayIDgrpsubserver(self):
-        return self.ArrayIDgrpsubserver
+    def get_ArrayIDgrpsubyoutube(self):
+        return self.ArrayIDgrpsubyoutube
+    def get_ArrayIDgrpsubtwitch(self):
+        return self.ArrayIDgrpsubtwitch
     def get_ArraynoFilter(self):
         return self.ArraynoFilter
     def get_DBhost(self):

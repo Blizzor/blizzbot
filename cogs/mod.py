@@ -19,6 +19,17 @@ class MembersCog(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    async def customdbcommand(self, ctx, arg=None):
+        text = ctx.message.content
+        text = text.replace("!customdbcommand ", "")
+        if ctx.message.channel.id == IDchanneladmin:
+            if arg:
+                #print(text)
+                await zz_functions.customdbcommand(ctx.message, text)
+
+
+    @commands.command()
+    @commands.guild_only()
     async def resetrank(self, ctx, arg=None):
         if ctx.message.channel.id == IDchanneladmin:
             if arg:

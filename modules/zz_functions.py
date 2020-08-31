@@ -62,8 +62,8 @@ async def cmndmc(message, client, name=None):
             val = (mcinfo['name'], uuid, message.author.id)
             await message.channel.send("Dein Minecraftname **" + name + "** wurde erfolgreich aktualisiert.")
         else:
-            sql = "INSERT INTO mcnames (discord_id, minecraft_name, uuid, isWhitelisted) VALUES (%s, %s, %s, %s)"
-            val = (message.author.id, mcinfo['name'], uuid, False)
+            sql = "INSERT INTO mcnames (discord_id, minecraft_name, uuid, isWhitelistedYoutube, isWhitelistedTwitch) VALUES (%s, %s, %s, %s, %s)"
+            val = (message.author.id, mcinfo['name'], uuid, False, False)
             await message.channel.send("Dein Minecraftname **" + name + "** wurde erfolgreich hinzugefügt.")
         mycursor.execute(sql, val)
         mydb.commit()
@@ -319,27 +319,53 @@ async def resetuser(message, name=None):
 
     return
 
+async def customdbcommand(message, command):
+
+    mydb = zz_init.getdb()
+    mycursor = mydb.cursor()
+    mycursor.execute(command)
+    mydb.commit()
+
+    return
+
 async def syncwhitelist():
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()
-    sql = "SELECT minecraft_name,uuid,isWhitelisted FROM mcnames"
+    sql = "SELECT minecraft_name,uuid,isWhitelistedYoutube,isWhitelistedTwitch FROM mcnames"
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
-    whitelist = []
+    whitelistyoutube = []
+    whitelisttwitch = []
     for x in myresult:
         if x[2]:
-            whitelist.append({
+            whitelistyoutube.append({
                 'uuid': x[1],
                 'name': x[0]
                 })
 
-    with open('whitelist/whitelist.json', 'w') as outfile:
-        json.dump(whitelist,outfile, indent=2)
+    with open('whitelist/youtube/whitelist.json', 'w') as outfile:
+        json.dump(whitelistyoutube,outfile, indent=2)
 
     #Kopiere Whitelist in verschiedene Ordner
-    paths = open("whitelist/paths.txt", "r")
+    paths = open("whitelist/youtube/paths.txt", "r")
     for line in paths:
-        copyfile('whitelist/whitelist.json', str(line.rstrip()) + 'whitelist.json')
+        copyfile('whitelist/youtube/whitelist.json', str(line.rstrip()) + 'whitelist.json')
+    paths.close()
+
+    for x in myresult:
+        if x[3]:
+            whitelisttwitch.append({
+                'uuid': x[1],
+                'name': x[0]
+                })
+
+    with open('whitelist/twitch/whitelist.json', 'w') as outfile:
+        json.dump(whitelisttwitch,outfile, indent=2)
+
+    #Kopiere Whitelist in verschiedene Ordner
+    paths = open("whitelist/twitch/paths.txt", "r")
+    for line in paths:
+        copyfile('whitelist/twitch/whitelist.json', str(line.rstrip()) + 'whitelist.json')
     paths.close()
 
     return

@@ -24,7 +24,8 @@ IDgrpverificate = zz_init.config().get_IDgrpverificate()
 IDgrpYT = zz_init.config().get_IDgrpYT()
 IDgrpYTGold = zz_init.config().get_IDgrpYTGold()
 IDgrpYTDiamant = zz_init.config().get_IDgrpYTDiamant()
-ArrayIDgrpsubserver = zz_init.config().get_ArrayIDgrpsubserver()
+ArrayIDgrpsubyoutube = zz_init.config().get_ArrayIDgrpsubyoutube()
+ArrayIDgrpsubtwitch = zz_init.config().get_ArrayIDgrpsubtwitch()
 ArraynoFilter = zz_init.config().get_ArraynoFilter()
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True, help_command=None)
@@ -176,13 +177,22 @@ async def on_member_update(before,after):
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()
 
-    wlrole = False
-    for i in ArrayIDgrpsubserver:
+    wlroleyoutube = False
+    wlroletwitch = False
+    for i in ArrayIDgrpsubyoutube:
         if await zz_functions.checkrole(after.roles, i):
-            wlrole = True
+            wlroleyoutube = True
+    for i in ArrayIDgrpsubtwitch:
+        if await zz_functions.checkrole(after.roles, i):
+            wlroletwitch = True
+    sql = "UPDATE mcnames SET isWhitelistedYoutube = %s WHERE discord_id = %s"
+    val = (wlroleyoutube, after.id)
 
-    sql = "UPDATE mcnames SET isWhitelisted = %s WHERE discord_id = %s"
-    val = (wlrole, after.id)
+    mycursor.execute(sql, val)
+    mydb.commit()
+
+    sql = "UPDATE mcnames SET isWhitelistedTwitch = %s WHERE discord_id = %s"
+    val = (wlroletwitch, after.id)
 
     mycursor.execute(sql, val)
     mydb.commit()
