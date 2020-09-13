@@ -37,6 +37,30 @@ class MembersCog(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    async def addblacklist(self, ctx, arg=None):
+        if ctx.message.channel.id == IDchanneladmin:
+            if arg:
+                await zz_functions.addblacklistword(ctx.message, arg)
+            else:
+                await ctx.channel.send("Bitte versuchen Sie den Befehl erneut mit einem Argument!")
+
+    @commands.command()
+    @commands.guild_only()
+    async def removeblacklist(self, ctx, arg=None):
+        if ctx.message.channel.id == IDchanneladmin:
+            if arg:
+                await zz_functions.removeblacklistword(ctx.message, arg)
+            else:
+                await ctx.channel.send("Bitte versuchen Sie den Befehl erneut mit einem Argument!")
+
+    @commands.command()
+    @commands.guild_only()
+    async def blacklist(self, ctx):
+        if ctx.message.channel.id == IDchanneladmin:
+            await ctx.message.channel.send(await zz_functions.blacklist())
+
+    @commands.command()
+    @commands.guild_only()
     async def syncwhitelist(self, ctx):
         if ctx.message.channel.id == IDchanneladmin:
             await zz_functions.syncwhitelist()

@@ -386,6 +386,53 @@ async def checkrole(roles, roleid):
             return True
     return False
 
+async def checkwords(message):
+
+    words = open("blacklist/discord/badwords.txt", "r")
+    for line in words:
+        if str(line.strip()).lower() in message.content.strip().lower():
+            return True
+    words.close()
+
+    return False
+
+async def addblacklistword(message, arg):
+
+    words = open("blacklist/discord/badwords.txt", "a")
+
+    words.write(arg.strip() + "\n")
+
+    words.close()
+
+    return False
+
+async def removeblacklistword(message, arg):
+
+    newfile = ""
+    words = open("blacklist/discord/badwords.txt", "r")
+    for line in words:
+        if line != arg.strip()+"\n":
+            newfile += line
+    words.close()
+
+    words = open("blacklist/discord/badwords.txt", "w")
+    words.write(newfile)
+
+    words.close()
+
+
+    return False
+
+async def blacklist():
+
+    file =(open("blacklist/discord/badwords.txt", "r"))
+    content = ""
+    for line in file:
+        content += line
+
+    return content
+
+
 #async def is_verified(ctx):
 #    check = await checkrole(ctx.author.roles, IDgrpverificate)
 #    return check

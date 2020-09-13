@@ -79,6 +79,7 @@ if not path.exists('config/config.json'):
     else:
         wronginput = True
         print("Falsche eingabe")
+
     if not wronginput:
         if not os.path.exists('config'):
             os.mkdir('config')
@@ -86,18 +87,26 @@ if not path.exists('config/config.json'):
             json.dump(jsonstructure,outfile, indent=4)
         print("Config erfolgreich erzeugt")
 
-    if not os.path.exists('whitelist/youtube/paths.txt'):
-        if not os.path.exists('whitelist'):
-            os.mkdir('whitelist')
-        if not os.path.exists('whitelist/youtube'):
-            os.mkdir('whitelist/youtube')
-        paths = open("whitelist/youtube/paths.txt", "a")
-        paths.close()
+if not os.path.exists('whitelist/youtube/paths.txt'):
+    if not os.path.exists('whitelist'):
+        os.mkdir('whitelist')
+    if not os.path.exists('whitelist/youtube'):
+        os.mkdir('whitelist/youtube')
+    paths = open("whitelist/youtube/paths.txt", "a")
+    paths.close()
 
-    if not os.path.exists('whitelist/twitch/paths.txt'):
-        if not os.path.exists('whitelist'):
-            os.mkdir('whitelist')
-        if not os.path.exists('whitelist/twitch'):
-            os.mkdir('whitelist/twitch')
-        paths = open("whitelist/twitch/paths.txt", "a")
-        paths.close()
+if not os.path.exists('whitelist/twitch/paths.txt'):
+    if not os.path.exists('whitelist'):
+        os.mkdir('whitelist')
+    if not os.path.exists('whitelist/twitch'):
+        os.mkdir('whitelist/twitch')
+    paths = open("whitelist/twitch/paths.txt", "a")
+    paths.close()
+
+if not os.path.exists('blacklist/discord/badwords.txt'):
+    if not os.path.exists('blacklist'):
+        os.mkdir('blacklist')
+    if not os.path.exists('blacklist/discord'):
+        os.mkdir('blacklist/discord')
+    paths = open("blacklist/discord/badwords.txt", "a")
+    paths.close()

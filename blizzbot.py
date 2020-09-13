@@ -93,9 +93,14 @@ async def on_message(message):
             if filter:
                 await message.delete()
 
+    if message.guild and message.author != bot.user and message.channel.id != IDchanneladmin:
+        if await zz_functions.checkwords(message):
+            await message.delete()
+            await message.author.create_dm()
+            await message.author.dm_channel.send("Ihre Nachricht mit dem Inhalt **" + message.content + "** wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
+
     if message.channel.id == IDchannelverificate and message.content != "!zz":
         await message.delete()
-
 
     if message.author != bot.user and message.guild and message.channel.id != IDchannelcommand:
         await zz_functions.getexp(message)
@@ -113,32 +118,8 @@ async def on_message(message):
                             await i.add_roles(j)
                     await message.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
 
-#    if message.content.startswith('$thumb'):
-#        channel = message.channel
-#        await channel.send('Send me that 👍 reaction, mate')
-#
-#        def check(reaction, user):
-#            return user == message.author and str(reaction.emoji) == '👍'
-#
-#        try:
-#            reaction, user = await bot.wait_for('reaction_add', timeout=60.0, check=check)
-#        except asyncio.TimeoutError:
-#            await channel.send('👎')
-#        else:
-#            await channel.send('👍')
-
 @bot.event
 async def on_raw_reaction_add(payload):
-#    print(payload)
-#    print(payload.emoji.id)
-#    print(payload.member)
-#    print(payload.channel_id)
-
-#    if payload.channel_id == IDchannelverificate:
-#        if payload.emoji.id == 596435950469513216:
-#            for i in bot.guilds[0].roles:
-#                if i.id == IDgrpverificate:
-#                    await payload.member.add_roles(i)
 
     if payload.channel_id == IDchannelverificate:
         if payload.emoji.id == 704707230137581658:

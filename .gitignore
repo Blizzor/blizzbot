@@ -15,6 +15,9 @@ config.json
 whitelist/
 whitelist.json
 
+# blacklist folder
+blacklist/
+
 # Distribution / packaging
 .Python
 build/
