@@ -64,37 +64,37 @@ class MembersCog(commands.Cog):
     @commands.command(aliases=["equipment"])
     @commands.guild_only()
     async def amazon(self, ctx):
-        await ctx.message.channel.send("https://www.amazon.de/shop/blizzor")
+        await ctx.message.channel.send("https://amazon.de/shop/blizzor")
 
     @commands.command(aliases=["merchandise"])
     @commands.guild_only()
     async def merch(self, ctx):
-        await ctx.message.channel.send("https://www.elbster.de/2197-blizzor")
+        await ctx.message.channel.send("https://elbster.de/2197-blizzor")
 
     @commands.command(aliases=["yt"])
     @commands.guild_only()
     async def youtube(self, ctx):
-        await ctx.message.channel.send("https://www.youtube.com/Blizzor")
+        await ctx.message.channel.send("https://youtube.com/Blizzor")
 
     @commands.command()
     @commands.guild_only()
     async def twitter(self, ctx):
-        await ctx.message.channel.send("https://www.blizzor.de/twitter")
+        await ctx.message.channel.send("https://blizzor.de/twitter")
 
     @commands.command()
     @commands.guild_only()
     async def twitch(self, ctx):
-        await ctx.message.channel.send("https://www.blizzor.de/twitch")
+        await ctx.message.channel.send("https://blizzor.de/twitch")
 
     @commands.command()
     @commands.guild_only()
     async def facebook(self, ctx):
-        await ctx.message.channel.send("https://www.blizzor.de/facebook")
+        await ctx.message.channel.send("https://blizzor.de/facebook")
 
     @commands.command()
     @commands.guild_only()
     async def instagram(self, ctx):
-        await ctx.message.channel.send("https://www.blizzor.de/instagram")
+        await ctx.message.channel.send("https://blizzor.de/instagram")
 
     @commands.command()
     @commands.guild_only()
