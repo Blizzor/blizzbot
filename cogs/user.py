@@ -6,6 +6,7 @@ from modules import zz_init
 IDchannelcommand = zz_init.config().get_IDchannelcommand()
 IDchannelverificate = zz_init.config().get_IDchannelverificate()
 IDgrpverificate = zz_init.config().get_IDgrpverificate()
+IDgrpnotify = zz_init.config().get_IDgrpnotify()
 
 class MembersCog(commands.Cog):
     def __init__(self, bot):
@@ -16,6 +17,12 @@ class MembersCog(commands.Cog):
     async def help(self, ctx):
         if ctx.message.channel.id == IDchannelcommand:
             await zz_functions.cmndhelp(ctx.message)
+
+    @commands.command()
+    @commands.guild_only()
+    async def notify(self, ctx):
+        if ctx.message.channel.id == IDchannelcommand:
+            await zz_functions.cmndnotify(ctx.message, ctx.guild)
 
     @commands.command(aliases=["minecraftname"])
     @commands.guild_only()
@@ -58,6 +65,8 @@ class MembersCog(commands.Cog):
                 grpverify = ctx.guild.get_role(IDgrpverificate)
                 await ctx.author.add_roles(grpverify)
                 await ctx.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
+                grpnotify = ctx.guild.get_role(IDgrpnotify)
+                await ctx.author.add_roles(grpnotify)
             else:
                 await ctx.author.dm_channel.send("Du bist bereits freigeschalten!")
 

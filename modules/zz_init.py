@@ -15,6 +15,7 @@ class config():
                 self.IDchanneladmin = p['IDchanneladmin']
                 self.IDchannellogs = p['IDchannellogs']
                 self.IDgrpverificate = p['IDgrpverificate']
+                self.IDgrpnotify = p['IDgrpnotify']
                 self.IDgrpYT = p['IDgrpYT']
                 self.IDgrpYTGold = p['IDgrpYTGold']
                 self.IDgrpYTDiamant = p['IDgrpYTDiamant']
@@ -40,6 +41,8 @@ class config():
         return self.IDchannellogs
     def get_IDgrpverificate(self):
         return self.IDgrpverificate
+    def get_IDgrpnotify(self):
+        return self.IDgrpnotify
     def get_IDgrpYT(self):
         return self.IDgrpYT
     def get_IDgrpYTGold(self):

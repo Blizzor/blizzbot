@@ -21,6 +21,7 @@ IDchannelverificate = zz_init.config().get_IDchannelverificate()
 IDchanneladmin = zz_init.config().get_IDchanneladmin()
 IDchannellogs = zz_init.config().get_IDchannellogs()
 IDgrpverificate = zz_init.config().get_IDgrpverificate()
+IDgrpnotify = zz_init.config().get_IDgrpnotify()
 IDgrpYT = zz_init.config().get_IDgrpYT()
 IDgrpYTGold = zz_init.config().get_IDgrpYTGold()
 IDgrpYTDiamant = zz_init.config().get_IDgrpYTDiamant()
@@ -124,7 +125,7 @@ async def on_raw_reaction_add(payload):
     if payload.channel_id == IDchannelverificate:
         if payload.emoji.id == 704707230137581658:
             for i in bot.guilds[0].roles:
-                if i.id == IDgrpverificate:
+                if i.id == IDgrpverificate and i.id == IDgrpnotify:
                     await payload.member.add_roles(i)
 
 

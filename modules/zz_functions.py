@@ -8,6 +8,7 @@ from os import path
 from shutil import copyfile
 
 IDgrpverificate = zz_init.config().get_IDgrpverificate()
+IDgrpnotify = zz_init.config().get_IDgrpnotify()
 
 async def cmndhelp(message):
     await message.channel.send("""```
@@ -69,6 +70,16 @@ async def cmndmc(message, client, name=None):
         mydb.commit()
     else:
         await message.channel.send("Der Minecraftname **" + name + "** existiert nicht.")
+    return
+
+async def cmndnotify(message, guild):
+    grpnotify = guild.get_role(IDgrpnotify)
+    if await checkrole(message.author.roles, IDgrpnotify):
+        await message.author.remove_roles(grpnotify)
+        #NIMM GRUPPE WEG
+    else:
+        await message.author.add_roles(grpnotify)
+        #GIB GRUPPE HER
     return
 
 async def cmndmcname(message, name=None):
