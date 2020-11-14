@@ -16,6 +16,7 @@ zz_init.logger()
 
 token = zz_init.config().get_token()
 IDcategoryvoice = zz_init.config().get_IDcategoryvoice()
+IDcategorytext = zz_init.config().get_IDcategorytext()
 IDchannelcommand = zz_init.config().get_IDchannelcommand()
 IDchannelverificate = zz_init.config().get_IDchannelverificate()
 IDchanneladmin = zz_init.config().get_IDchanneladmin()
@@ -103,7 +104,7 @@ async def on_message(message):
     if message.channel.id == IDchannelverificate and message.content != "!zz":
         await message.delete()
 
-    if message.author != bot.user and message.guild and message.channel.id != IDchannelcommand:
+    if message.author != bot.user and message.guild and message.channel.id != IDchannelcommand and message.channel.category_id != IDcategorytext:
         await zz_functions.getexp(message)
         number = randrange(0,1000)
         if(number == 5):
@@ -185,27 +186,83 @@ async def on_member_update(before,after):
 
 @bot.event
 async def on_voice_state_update(member, before, after):
+    #print(before.channel)
+    #print(after.channel)
+    if(before.channel != after.channel): #Wenn Änderung durch Channelwechsel stattfindet
+        tcategory = None
+        for n in member.guild.categories:
+            if n.id == IDcategorytext:
+                tcategory = n
 
-    channels = (member.guild.voice_channels)
-    for j in channels:
-        if j.name == "Stream-Channel": # Wenn Kategory richtig ist
-            if not j.members:
-                await j.delete()
-
-    channels = (member.guild.voice_channels)
-
-    emptychannels = False
-    cpchannel = channels[0]
-    for j in channels:
-        if j.category.id == IDcategoryvoice: # Wenn Kategory richtig ist
-            if not j.members: # Wenn niemand im Channel ist
-                if not emptychannels: # Wenn emptychannel False ist
-                    emptychannels = True
-                else: # Wenn emptychannel True ist
+        channels = (member.guild.voice_channels)
+        for j in channels:
+            if j.name == "Stream-Channel": # Wenn Kategory richtig ist
+                if not j.members:
                     await j.delete()
-            cpchannel = j
-    if not emptychannels:
-        await cpchannel.clone(name="Channel")
+
+        channels = (member.guild.voice_channels)
+
+        emptychannels = False
+        cpchannel = channels[0]
+        for j in channels:
+            if j.category.id == IDcategoryvoice: # Wenn Kategory richtig ist
+                if not j.members: # Wenn niemand im Channel ist
+                    if not emptychannels: # Wenn emptychannel False ist
+                        emptychannels = True
+                    else: # Wenn emptychannel True ist
+                        await j.delete()
+                cpchannel = j
+        if not emptychannels:
+            await cpchannel.clone(name="Channel")
+
+        tchannels = (member.guild.text_channels)
+        temprole2 = None
+        #Entfernt Textchannel für Voicechannel
+        if(before.channel != None): # Wenn Benutzer Channel verlässt
+            #Entferne Nutzer aus Role
+            for j2 in member.guild.roles:
+                if str(before.channel.id) == j2.name: #Suche vorherigen Channel
+                    temprole2 = j2
+                    await member.remove_roles(j2)
+            for k in channels: # Prüfe Sprachchannel
+                if k.category.id == IDcategoryvoice and k.id == before.channel.id: # Wenn Kategory richtig ist
+                    if not k.members: # Wenn niemand im Channel ist
+                        #Entferne Rolle und Textchannel
+                        for l in tchannels:
+                            if(l.topic != None and l.category.id == IDcategorytext):
+                                if str(k.id) == l.topic:
+                                    #print("Komm ich hier rein")
+                                    #print(temprole2)
+                                    if(temprole2 != None):
+                                        #print("und hier?")
+                                        await temprole2.delete() # Entferne Rolle
+                                    await l.delete() # Entferne Textchannel
+                            #print(l.topic)
+
+
+        if(after.channel != None and after.channel.category_id == IDcategoryvoice): # Wenn Channel betreten wird
+            newroleexists = False
+            newrole = None
+            for role2 in member.guild.roles:
+                if(role2.name == str(after.channel.id)):
+                    newroleexists = True
+                    newrole = role2
+            if not newroleexists: #Wenn Rolle nicht existiert
+                #Erstellt Rolle für Textchannel
+                newrole = await member.guild.create_role(name = str(after.channel.id))
+            #Erstellt Textchannel für Voicechannel
+            channelexists = False
+            for m in tchannels:
+                if(m.topic == str(after.channel.id)):
+                    channelexists = True
+            if(not channelexists): # Wenn der Textchannel nicht existiert
+                overwrites = {
+                member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                member.guild.get_role(newrole.id): discord.PermissionOverwrite(read_messages=True)
+                }
+                await member.guild.create_text_channel('Channel', overwrites=overwrites, category = tcategory, topic = after.channel.id)
+            await member.add_roles(newrole) # Vergibt Rolle
+
     return
 
 @bot.event

@@ -10,6 +10,7 @@ class config():
             for p in jsonstructure['discord']:
                 self.token = p['token']
                 self.IDcategoryvoice = p['IDcategoryvoice']
+                self.IDcategorytext = p['IDcategorytext']
                 self.IDchannelcommand = p['IDchannelcommand']
                 self.IDchannelverificate = p['IDchannelverificate']
                 self.IDchanneladmin = p['IDchanneladmin']
@@ -31,6 +32,8 @@ class config():
         return self.token
     def get_IDcategoryvoice(self):
         return self.IDcategoryvoice
+    def get_IDcategorytext(self):
+        return self.IDcategorytext
     def get_IDchannelcommand(self):
         return self.IDchannelcommand
     def get_IDchannelverificate(self):
