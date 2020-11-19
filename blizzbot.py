@@ -26,10 +26,11 @@ IDgrpnotify = zz_init.config().get_IDgrpnotify()
 IDgrpYT = zz_init.config().get_IDgrpYT()
 IDgrpYTGold = zz_init.config().get_IDgrpYTGold()
 IDgrpYTDiamant = zz_init.config().get_IDgrpYTDiamant()
+IDgrpMod = zz_init.config().get_IDgrpMod()
 ArrayIDgrpsubyoutube = zz_init.config().get_ArrayIDgrpsubyoutube()
 ArrayIDgrpsubtwitch = zz_init.config().get_ArrayIDgrpsubtwitch()
 ArraynoFilter = zz_init.config().get_ArraynoFilter()
-
+#test
 bot = commands.Bot(command_prefix='!', case_insensitive=True, help_command=None)
 
 initial_extensions = ['cogs.user',
@@ -220,10 +221,6 @@ async def on_voice_state_update(member, before, after):
         #Entfernt Textchannel für Voicechannel
         if(before.channel != None): # Wenn Benutzer Channel verlässt
             #Entferne Nutzer aus Role
-            for j2 in member.guild.roles:
-                if str(before.channel.id) == j2.name: #Suche vorherigen Channel
-                    temprole2 = j2
-                    await member.remove_roles(j2)
             for k in channels: # Prüfe Sprachchannel
                 if k.category.id == IDcategoryvoice and k.id == before.channel.id: # Wenn Kategory richtig ist
                     if not k.members: # Wenn niemand im Channel ist
@@ -231,26 +228,16 @@ async def on_voice_state_update(member, before, after):
                         for l in tchannels:
                             if(l.topic != None and l.category.id == IDcategorytext):
                                 if str(k.id) == l.topic:
-                                    #print("Komm ich hier rein")
-                                    #print(temprole2)
-                                    if(temprole2 != None):
-                                        #print("und hier?")
-                                        await temprole2.delete() # Entferne Rolle
                                     await l.delete() # Entferne Textchannel
-                            #print(l.topic)
+                    else:
+                        for l3 in tchannels:
+                            if(l3.topic != None and l3.category.id == IDcategorytext):
+                                if str(k.id) == l3.topic:
+                                    await l3.set_permissions(member, read_messages=False)
 
 
         if(after.channel != None and after.channel.category_id == IDcategoryvoice): # Wenn Channel betreten wird
-            newroleexists = False
-            newrole = None
-            for role2 in member.guild.roles:
-                if(role2.name == str(after.channel.id)):
-                    newroleexists = True
-                    newrole = role2
-            if not newroleexists: #Wenn Rolle nicht existiert
-                #Erstellt Rolle für Textchannel
-                newrole = await member.guild.create_role(name = str(after.channel.id))
-            #Erstellt Textchannel für Voicechannel
+
             channelexists = False
             for m in tchannels:
                 if(m.topic == str(after.channel.id)):
@@ -258,10 +245,13 @@ async def on_voice_state_update(member, before, after):
             if(not channelexists): # Wenn der Textchannel nicht existiert
                 overwrites = {
                 member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
-                member.guild.get_role(newrole.id): discord.PermissionOverwrite(read_messages=True)
+                member.guild.get_role(IDgrpMod): discord.PermissionOverwrite(read_messages=True)
                 }
                 await member.guild.create_text_channel('Channel', overwrites=overwrites, category = tcategory, topic = after.channel.id)
-            await member.add_roles(newrole) # Vergibt Rolle
+            for l2 in tchannels:
+                if(l2.topic != None and l2.category.id == IDcategorytext):
+                    if str(after.channel.id) == l2.topic:
+                        await l2.set_permissions(member, read_messages=True)
 
     return
 
