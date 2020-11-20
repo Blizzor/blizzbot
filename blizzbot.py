@@ -30,7 +30,7 @@ IDgrpMod = zz_init.config().get_IDgrpMod()
 ArrayIDgrpsubyoutube = zz_init.config().get_ArrayIDgrpsubyoutube()
 ArrayIDgrpsubtwitch = zz_init.config().get_ArrayIDgrpsubtwitch()
 ArraynoFilter = zz_init.config().get_ArraynoFilter()
-
+#test
 bot = commands.Bot(command_prefix='!', case_insensitive=True, help_command=None)
 
 initial_extensions = ['cogs.user',
