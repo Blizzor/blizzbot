@@ -1,1 +1,1 @@
-python3.7 modules/blizzbot.py
+python3.7 blizzbot.py

@@ -224,12 +224,13 @@ async def on_voice_state_update(member, before, after):
             for k in channels: # Prüfe Sprachchannel
                 if k.category.id == IDcategoryvoice and k.id == before.channel.id: # Wenn Kategory richtig ist
                     if not k.members: # Wenn niemand im Channel ist
-                        #Entferne Rolle und Textchannel
+                        #Entferne Berechtigung
                         for l in tchannels:
                             if(l.topic != None and l.category.id == IDcategorytext):
                                 if str(k.id) == l.topic:
                                     await l.delete() # Entferne Textchannel
                     else:
+                        #Entferne Channel
                         for l3 in tchannels:
                             if(l3.topic != None and l3.category.id == IDcategorytext):
                                 if str(k.id) == l3.topic:
