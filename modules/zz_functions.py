@@ -208,10 +208,9 @@ async def cmndrank(message, name=None):
         embed.add_field(name="Rang", value=str(rank), inline=True)
         embed.add_field(name="Exp", value=str(myresult[0]), inline=True)
         temp = await message.channel.send(embed=embed)
-        await temp.add_reaction('<:ZZright:780171887619473458>')
         await temp.add_reaction('<:ZZleft:780172418781675531>')
-
-
+        await temp.add_reaction('<:ZZright:780171887619473458>')
+        
     else:
         await message.channel.send("Benutzer nicht in Datenbank vorhanden")
 
