@@ -135,27 +135,27 @@ async def switchrank(payload, bot):
                 Ziel = Rang -1
             else:
                 Rangexists = False
-        if payload.emoji.id == 780174896943595602:
+        if payload.emoji.id == 780171887619473458:
             Ziel = Rang +1
 
-        if(Rangexists):
-            sql = "SELECT points, discord_id FROM ranking ORDER BY points DESC"
-            mycursor.execute(sql)
-            myresult2 = mycursor.fetchall()
+    if(Rangexists):
+        sql = "SELECT points, discord_id FROM ranking ORDER BY points DESC"
+        mycursor.execute(sql)
+        myresult2 = mycursor.fetchall()
 
-            i = 1
-            for p in myresult2:
-                if(i == Ziel):
-                    Zielexp = p[0]
-                    Zielname = await bot.fetch_user(int(p[1]))
-                i = i+1
-            embed.set_thumbnail(url=Zielname.avatar_url)
-            embed.set_field_at(0, name="Benutzer", value=Zielname.name, inline=False)
-            embed.set_field_at(1, name="Rang", value=Ziel, inline=True)
-            embed.set_field_at(2, name="Exp", value=Zielexp, inline=True)
-            await message.edit(embed=embed)
+        i = 1
+        for p in myresult2:
+            if(i == Ziel):
+                Zielexp = p[0]
+                Zielname = await bot.fetch_user(int(p[1]))
+            i = i+1
+        embed.set_thumbnail(url=Zielname.avatar_url)
+        embed.set_field_at(0, name="Benutzer", value=Zielname.name, inline=False)
+        embed.set_field_at(1, name="Rang", value=Ziel, inline=True)
+        embed.set_field_at(2, name="Exp", value=Zielexp, inline=True)
+        await message.edit(embed=embed)
 
-        await message.remove_reaction(payload.emoji, payload.member)
+    await message.remove_reaction(payload.emoji, payload.member)
         #print(Zielname)
         #print(Zielexp)
 
