@@ -130,6 +130,14 @@ async def on_raw_reaction_add(payload):
                 if i.id == IDgrpverificate or i.id == IDgrpnotify:
                     await payload.member.add_roles(i)
 
+    if(payload.member != bot.user):
+        if payload.channel_id == IDchannelcommand:
+            if payload.emoji.id == 780172418781675531:
+                await zz_functions.switchrank(payload, bot)
+        if payload.channel_id == IDchannelcommand:
+            if payload.emoji.id == 780171887619473458:
+                await zz_functions.switchrank(payload, bot)
+
 
 @bot.event
 async def on_member_join(member):
@@ -138,6 +146,7 @@ async def on_member_join(member):
     Bitte gib diesen Befehl im Channel #freischalten oder unter dieser Nachricht ein."""
     await member.create_dm()
     await member.dm_channel.send(content=Nachricht)
+    zz_functions.newjoin(member)
     return
 
 @bot.event

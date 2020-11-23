@@ -18,6 +18,10 @@ async def cmndhelp(message):
 !anfrage - Schreibe dem Bot eine Anfrage, die direkt an die Moderatoren privat weitergeleitet werden```""")
     return
 
+async def newjoin(member):
+    #hier sollte ein embed erzeugt werden
+    return
+
 async def question(message, client):
 #    print(message.author.dm_channel.me)
 #    print("Test1")
@@ -111,6 +115,52 @@ async def cmndmcname(message, name=None):
         await message.channel.send("Dein Minecraft Name konnte nicht gefunden werden")
     return
 
+async def switchrank(payload, bot):
+    mydb = zz_init.getdb()
+    mycursor = mydb.cursor()
+    Rang = None
+    Ziel = None
+    Zielname = None
+    Zielexp = None
+    Rangexists = True
+    channel = bot.get_channel(payload.channel_id)
+    message = await channel.fetch_message(payload.message_id)
+    embed = message.embeds[0]
+    if(embed.title == "Rangfunktion"):
+        for field in message.embeds[0].fields:
+            if field.name == "Rang":
+                Rang = int(field.value)
+        if payload.emoji.id == 780174867404029973:
+            if(Rang > 1):
+                Ziel = Rang -1
+            else:
+                Rangexists = False
+        if payload.emoji.id == 780174896943595602:
+            Ziel = Rang +1
+
+        if(Rangexists):
+            sql = "SELECT points, discord_id FROM ranking ORDER BY points DESC"
+            mycursor.execute(sql)
+            myresult2 = mycursor.fetchall()
+
+            i = 1
+            for p in myresult2:
+                if(i == Ziel):
+                    Zielexp = p[0]
+                    Zielname = await bot.fetch_user(int(p[1]))
+                i = i+1
+            embed.set_thumbnail(url=Zielname.avatar_url)
+            embed.set_field_at(0, name="Benutzer", value=Zielname.name, inline=False)
+            embed.set_field_at(1, name="Rang", value=Ziel, inline=True)
+            embed.set_field_at(2, name="Exp", value=Zielexp, inline=True)
+            await message.edit(embed=embed)
+
+        await message.remove_reaction(payload.emoji, payload.member)
+        #print(Zielname)
+        #print(Zielexp)
+
+    return
+
 async def cmndrank(message, name=None):
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()
@@ -130,6 +180,7 @@ async def cmndrank(message, name=None):
     myresult2 = mycursor.fetchall()
     count = 1
     rank = 0
+    thumbnailurl = None
     if name or message.raw_mentions:
         for p in myresult2:
             if p[1] == ID:
@@ -145,15 +196,21 @@ async def cmndrank(message, name=None):
         if name or message.raw_mentions:
             if message.raw_mentions:
                 name = message.guild.get_member(ID).name
-            embed = discord.Embed(title=name, color=0xedbc5d)
-            embed.set_thumbnail(url=message.guild.get_member(ID).avatar_url)
+            thumbnailurl = message.guild.get_member(ID).avatar_url
         else:
-            embed = discord.Embed(title=message.author.name, color=0xedbc5d)
-            embed.set_thumbnail(url=message.author.avatar_url)
+            name = message.author.name
+            thumbnailurl = message.author.avatar_url
 
+
+        embed = discord.Embed(title="Rangfunktion", color=0xedbc5d)
+        embed.set_thumbnail(url=thumbnailurl)
+        embed.add_field(name="Benutzer", value=name, inline=False)
         embed.add_field(name="Rang", value=str(rank), inline=True)
         embed.add_field(name="Exp", value=str(myresult[0]), inline=True)
-        await message.channel.send(embed=embed)
+        temp = await message.channel.send(embed=embed)
+        await temp.add_reaction('<:ZZright:780171887619473458>')
+        await temp.add_reaction('<:ZZleft:780172418781675531>')
+
 
     else:
         await message.channel.send("Benutzer nicht in Datenbank vorhanden")
