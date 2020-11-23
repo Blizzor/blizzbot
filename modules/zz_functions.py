@@ -130,7 +130,7 @@ async def switchrank(payload, bot):
         for field in message.embeds[0].fields:
             if field.name == "Rang":
                 Rang = int(field.value)
-        if payload.emoji.id == 780174867404029973:
+        if payload.emoji.id == 780172418781675531:
             if(Rang > 1):
                 Ziel = Rang -1
             else:
@@ -210,7 +210,7 @@ async def cmndrank(message, name=None):
         temp = await message.channel.send(embed=embed)
         await temp.add_reaction('<:ZZleft:780172418781675531>')
         await temp.add_reaction('<:ZZright:780171887619473458>')
-        
+
     else:
         await message.channel.send("Benutzer nicht in Datenbank vorhanden")
 
