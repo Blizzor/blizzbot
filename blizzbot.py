@@ -43,6 +43,8 @@ if __name__ == '__main__': #Wenn Datei als Hauptdatei aufgerufen wird
 @bot.event
 async def on_ready():
     print('Bot wurde gestartet')
+    return
+
 #
 #@bot.command()
 #async def test(ctx, arg="null"):
@@ -132,10 +134,10 @@ async def on_raw_reaction_add(payload):
 
     if(payload.member != bot.user):
         if payload.channel_id == IDchannelcommand:
-            if payload.emoji.id == 780172418781675531:
+            if payload.emoji.id == 780172418781675531: # Links
                 await zz_functions.switchrank(payload, bot)
         if payload.channel_id == IDchannelcommand:
-            if payload.emoji.id == 780171887619473458:
+            if payload.emoji.id == 780171887619473458: # Rechts
                 await zz_functions.switchrank(payload, bot)
 
 
@@ -246,7 +248,7 @@ async def on_voice_state_update(member, before, after):
                                     await l3.set_permissions(member, read_messages=False)
 
 
-        if(after.channel != None and after.channel.category_id == IDcategoryvoice): # Wenn Channel betreten wird
+        if(after.channel != None and after.channel.category_id == IDcategoryvoice and after.channel.name != "Stream-Channel"): # Wenn Channel betreten wird
 
             channelexists = False
             for m in tchannels:

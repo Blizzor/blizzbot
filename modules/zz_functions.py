@@ -130,12 +130,12 @@ async def switchrank(payload, bot):
         for field in message.embeds[0].fields:
             if field.name == "Rang":
                 Rang = int(field.value)
-        if payload.emoji.id == 780172418781675531:
+        if payload.emoji.id == 780172418781675531: # Links
             if(Rang > 1):
                 Ziel = Rang -1
             else:
                 Rangexists = False
-        if payload.emoji.id == 780171887619473458:
+        if payload.emoji.id == 780171887619473458: # Rechts
             Ziel = Rang +1
 
     if(Rangexists):
