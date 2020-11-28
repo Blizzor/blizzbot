@@ -10,6 +10,7 @@ from random import randrange
 from discord.ext import commands
 from discord.utils import get
 
+intents = discord.Intents.all()
 
 
 zz_init.logger()
@@ -31,7 +32,7 @@ ArrayIDgrpsubyoutube = zz_init.config().get_ArrayIDgrpsubyoutube()
 ArrayIDgrpsubtwitch = zz_init.config().get_ArrayIDgrpsubtwitch()
 ArraynoFilter = zz_init.config().get_ArraynoFilter()
 #test
-bot = commands.Bot(command_prefix='!', case_insensitive=True, help_command=None)
+bot = commands.Bot(command_prefix='!', case_insensitive=True, help_command=None, intents=intents)
 
 initial_extensions = ['cogs.user',
                       'cogs.mod']
