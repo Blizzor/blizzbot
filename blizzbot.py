@@ -12,7 +12,6 @@ from discord.utils import get
 
 intents = discord.Intents.all()
 
-
 zz_init.logger()
 
 token = zz_init.config().get_token()
