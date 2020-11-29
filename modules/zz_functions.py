@@ -9,6 +9,8 @@ from shutil import copyfile
 
 IDgrpverificate = zz_init.config().get_IDgrpverificate()
 IDgrpnotify = zz_init.config().get_IDgrpnotify()
+ArrayIDgrpsubyoutube = zz_init.config().get_ArrayIDgrpsubyoutube()
+ArrayIDgrpsubtwitch = zz_init.config().get_ArrayIDgrpsubtwitch()
 
 async def cmndhelp(message):
     await message.channel.send("""```
@@ -67,8 +69,18 @@ async def cmndmc(message, client, name=None):
             val = (mcinfo['name'], uuid, message.author.id)
             await message.channel.send("Dein Minecraftname **" + name + "** wurde erfolgreich aktualisiert.")
         else:
+            whitelistedyoutube = False
+            whitelistedtwitch = True
+            for role in message.author.roles:
+                for youtubeid in ArrayIDgrpsubyoutube:
+                    if(role.id == youtubeid):
+                        whitelistedyoutube = True
+                for twitchid in ArrayIDgrpsubtwitch:
+                    if(role.id == twitchid):
+                        whitelistedtwitch = True
+
             sql = "INSERT INTO mcnames (discord_id, minecraft_name, uuid, isWhitelistedYoutube, isWhitelistedTwitch) VALUES (%s, %s, %s, %s, %s)"
-            val = (message.author.id, mcinfo['name'], uuid, False, False)
+            val = (message.author.id, mcinfo['name'], uuid, whitelistedyoutube, whitelistedtwitch)
             await message.channel.send("Dein Minecraftname **" + name + "** wurde erfolgreich hinzugefügt.")
         mycursor.execute(sql, val)
         mydb.commit()

@@ -46,24 +46,6 @@ async def on_ready():
     print('Bot wurde gestartet')
     return
 
-#
-#@bot.command()
-#async def test(ctx, arg="null"):
-#    print(ctx.message.raw_mentions)
-#    print(ctx.message)
-#    print(arg)
-#   embed=discord.Embed()
-#    embed = discord.Embed(title="Title", description="Desc", color=0xedbc5d)
-#    embed.set_image(url="https://vignette.wikia.nocookie.net/minecraft/images/1/19/Apfel.png/revision/latest/top-crop/width/360/height/450?cb=20160919195300&path-prefix=de")
-#    embed.set_thumbnail(url=ctx.message.author.avatar_url)
-#    embed.set_author(name="fred",url="https://vignette.wikia.nocookie.net/minecraft/images/1/19/Apfel.png/revision/latest/top-crop/width/360/height/450?cb=20160919195300&path-prefix=de", icon_url="https://vignette.wikia.nocookie.net/minecraft/images/1/19/Apfel.png/revision/latest/top-crop/width/360/height/450?cb=20160919195300&path-prefix=de")
-#    embed.set_footer(text="fred",icon_url="https://vignette.wikia.nocookie.net/minecraft/images/1/19/Apfel.png/revision/latest/top-crop/width/360/height/450?cb=20160919195300&path-prefix=de")
-#    await ctx.channel.send(embed=embed)
-#    print(ctx.message.author.avatar_url)
-#    #await ctx.send(arg)
-#    #print(ctx)
-#    #print(arg)
-
 @bot.command(aliases=["minecraft"])
 async def mc(ctx, arg=None):
     if ctx.message.channel.id == IDchannelcommand:
@@ -170,30 +152,33 @@ async def on_member_remove(member):
 
 @bot.event
 async def on_member_update(before,after):
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
 
-    wlroleyoutube = False
-    wlroletwitch = False
-    for i in ArrayIDgrpsubyoutube:
-        if await zz_functions.checkrole(after.roles, i):
-            wlroleyoutube = True
-    for i in ArrayIDgrpsubtwitch:
-        if await zz_functions.checkrole(after.roles, i):
-            wlroletwitch = True
-    sql = "UPDATE mcnames SET isWhitelistedYoutube = %s WHERE discord_id = %s"
-    val = (wlroleyoutube, after.id)
+    if(before.roles != after.roles):
 
-    mycursor.execute(sql, val)
-    mydb.commit()
+        mydb = zz_init.getdb()
+        mycursor = mydb.cursor()
 
-    sql = "UPDATE mcnames SET isWhitelistedTwitch = %s WHERE discord_id = %s"
-    val = (wlroletwitch, after.id)
+        wlroleyoutube = False
+        wlroletwitch = False
+        for i in ArrayIDgrpsubyoutube:
+            if await zz_functions.checkrole(after.roles, i):
+                wlroleyoutube = True
+        for i in ArrayIDgrpsubtwitch:
+            if await zz_functions.checkrole(after.roles, i):
+                wlroletwitch = True
+        sql = "UPDATE mcnames SET isWhitelistedYoutube = %s WHERE discord_id = %s"
+        val = (wlroleyoutube, after.id)
 
-    mycursor.execute(sql, val)
-    mydb.commit()
+        mycursor.execute(sql, val)
+        mydb.commit()
 
-    await zz_functions.syncwhitelist()
+        sql = "UPDATE mcnames SET isWhitelistedTwitch = %s WHERE discord_id = %s"
+        val = (wlroletwitch, after.id)
+
+        mycursor.execute(sql, val)
+        mydb.commit()
+
+        await zz_functions.syncwhitelist()
 
     return
 
