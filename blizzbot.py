@@ -14,8 +14,6 @@ intents = discord.Intents.all()
 
 zz_init.logger()
 
-
-
 token = zz_init.config().get_token()
 IDcategoryvoice = zz_init.config().get_IDcategoryvoice()
 IDcategorytext = zz_init.config().get_IDcategorytext()
