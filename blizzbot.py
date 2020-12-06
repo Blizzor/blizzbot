@@ -247,7 +247,7 @@ async def on_voice_state_update(member, before, after):
                         for l3 in tchannels:
                             if(l3.topic != None and l3.category.id == IDcategorytext):
                                 if str(k.id) == l3.topic:
-                                    await l3.set_permissions(member, read_messages=False)
+                                    await l3.set_permissions(member, read_messages=None)
 
 
         if(after.channel != None and after.channel.category_id == IDcategoryvoice and after.channel.name != "Stream-Channel"): # Wenn Channel betreten wird
