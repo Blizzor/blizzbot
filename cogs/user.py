@@ -3,6 +3,7 @@ from discord.ext import commands
 from modules import zz_functions
 from modules import zz_init
 
+IDchannelstandard = zz_init.config().get_IDchannelstandard()
 IDchannelcommand = zz_init.config().get_IDchannelcommand()
 IDchannelverificate = zz_init.config().get_IDchannelverificate()
 IDgrpverificate = zz_init.config().get_IDgrpverificate()
@@ -67,6 +68,7 @@ class MembersCog(commands.Cog):
                 await ctx.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
                 grpnotify = ctx.guild.get_role(IDgrpnotify)
                 await ctx.author.add_roles(grpnotify)
+                await zz_functions.gotverified(ctx.author, self.bot.get_channel(IDchannelstandard), self.bot)
             else:
                 await ctx.author.dm_channel.send("Du bist bereits freigeschalten!")
 

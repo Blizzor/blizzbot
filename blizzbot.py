@@ -17,6 +17,7 @@ zz_init.logger()
 token = zz_init.config().get_token()
 IDcategoryvoice = zz_init.config().get_IDcategoryvoice()
 IDcategorytext = zz_init.config().get_IDcategorytext()
+IDchannelstandard = zz_init.config().get_IDchannelstandard()
 IDchannelcommand = zz_init.config().get_IDchannelcommand()
 IDchannelverificate = zz_init.config().get_IDchannelverificate()
 IDchanneladmin = zz_init.config().get_IDchanneladmin()
@@ -44,6 +45,14 @@ if __name__ == '__main__': #Wenn Datei als Hauptdatei aufgerufen wird
 async def on_ready():
     print('Bot wurde gestartet')
     return
+
+@bot.command(aliases=["w"])
+async def welcome(ctx, arg=None):
+    embed = discord.Embed(title="Willkommen!", color=0xedbc5d)
+    embed.set_thumbnail(url=ctx.message.author.avatar_url)
+    embed.add_field(name="Name", value=ctx.message.author.name, inline=False)
+    embed.add_field(name="freigeschalten?", value="Nein", inline=False)
+    await ctx.channel.send(embed=embed)
 
 @bot.command(aliases=["minecraft"])
 async def mc(ctx, arg=None):
@@ -96,14 +105,15 @@ async def on_message(message):
             await message.add_reaction('<:ZZBlizzor:493814042780237824>')
 
 
-    if message.author != bot.user and not message.guild:
-        if message.content == '!zz':
-            for i in bot.guilds[0].members:
-                if i.id == message.author.id:
-                    for j in bot.guilds[0].roles:
-                        if j.id == IDgrpverificate:
-                            await i.add_roles(j)
-                    await message.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
+#    if message.author != bot.user and not message.guild:
+#        if message.content == '!zz':
+#            for i in bot.guilds[0].members:
+#                if i.id == message.author.id:
+#                    for j in bot.guilds[0].roles:
+#                        if j.id == IDgrpverificate:
+#                            await i.add_roles(j)
+#                    await message.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
+#                    await zz_functions.gotverified(message.author, bot.get_channel(IDchannelstandard), bot)
 
 @bot.event
 async def on_raw_reaction_add(payload):
@@ -113,6 +123,7 @@ async def on_raw_reaction_add(payload):
             for i in bot.guilds[0].roles:
                 if i.id == IDgrpverificate or i.id == IDgrpnotify:
                     await payload.member.add_roles(i)
+                    await zz_functions.gotverified(payload.member, bot.get_channel(IDchannelstandard), bot)
 
     if(payload.member != bot.user):
         if payload.channel_id == IDchannelcommand:
@@ -127,10 +138,16 @@ async def on_raw_reaction_add(payload):
 async def on_member_join(member):
     Nachricht = """Willkommen auf Blizzor's Community Server.
     Damit du auf dem Server freigeschalten wirst, musst du den Befehl !zz verwenden.
-    Bitte gib diesen Befehl im Channel #freischalten oder unter dieser Nachricht ein."""
+    Bitte gib diesen Befehl im Channel #freischalten ein."""
     await member.create_dm()
     await member.dm_channel.send(content=Nachricht)
-    zz_functions.newjoin(member)
+    #await zz_functions.newjoin(member)
+    embed = discord.Embed(title="Willkommen!", color=0xedbc5d)
+    embed.set_thumbnail(url=member.avatar_url)
+    embed.add_field(name="Name", value=member.name, inline=False)
+    embed.add_field(name="freigeschalten?", value="Nein", inline=False)
+    channel = bot.get_channel(IDchannelstandard)
+    await channel.send(embed=embed)
     return
 
 @bot.event

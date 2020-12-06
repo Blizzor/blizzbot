@@ -98,6 +98,22 @@ async def cmndnotify(message, guild):
         #GIB GRUPPE HER
     return
 
+async def gotverified(author, channel, bot):
+    embed = None
+    embedmessage = None
+    async for message in channel.history(limit=200):
+        if message.author == bot.user:
+            if message.embeds:
+                if(message.embeds[0].fields[0].value == author.name):
+                    embed = message.embeds[0]
+                    embedmessage = message
+    if(embed != None):
+        embed.set_field_at(1, name="freigeschalten?", value="Ja", inline=False)
+
+        await embedmessage.edit(embed=embed)
+    #Hier wird Embed aktualisiert
+    return
+
 async def cmndmcname(message, name=None):
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()
