@@ -46,14 +46,6 @@ async def on_ready():
     print('Bot wurde gestartet')
     return
 
-@bot.command(aliases=["w"])
-async def welcome(ctx, arg=None):
-    embed = discord.Embed(title="Willkommen!", color=0xedbc5d)
-    embed.set_thumbnail(url=ctx.message.author.avatar_url)
-    embed.add_field(name="Name", value=ctx.message.author.name, inline=False)
-    embed.add_field(name="freigeschalten?", value="Nein", inline=False)
-    await ctx.channel.send(embed=embed)
-
 @bot.command(aliases=["minecraft"])
 async def mc(ctx, arg=None):
     if ctx.message.channel.id == IDchannelcommand:
@@ -142,12 +134,12 @@ async def on_member_join(member):
     await member.create_dm()
     await member.dm_channel.send(content=Nachricht)
     #await zz_functions.newjoin(member)
-    embed = discord.Embed(title="Willkommen!", color=0xedbc5d)
-    embed.set_thumbnail(url=member.avatar_url)
-    embed.add_field(name="Name", value=member.name, inline=False)
-    embed.add_field(name="freigeschalten?", value="Nein", inline=False)
-    channel = bot.get_channel(IDchannelstandard)
-    await channel.send(embed=embed)
+    #embed = discord.Embed(title="Willkommen!", color=0xedbc5d)
+    #embed.set_thumbnail(url=member.avatar_url)
+    #embed.add_field(name="Name", value=member.name, inline=False)
+    #embed.add_field(name="freigeschalten?", value="Nein", inline=False)
+    #channel = bot.get_channel(IDchannelstandard)
+    #await channel.send(embed=embed)
     return
 
 @bot.event

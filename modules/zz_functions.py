@@ -6,6 +6,7 @@ from modules import zz_init
 import time
 from os import path
 from shutil import copyfile
+from random import randrange
 
 IDgrpverificate = zz_init.config().get_IDgrpverificate()
 IDgrpnotify = zz_init.config().get_IDgrpnotify()
@@ -99,19 +100,19 @@ async def cmndnotify(message, guild):
     return
 
 async def gotverified(author, channel, bot):
-    embed = None
-    embedmessage = None
-    async for message in channel.history(limit=200):
-        if message.author == bot.user:
-            if message.embeds:
-                if(message.embeds[0].fields[0].value == author.name):
-                    embed = message.embeds[0]
-                    embedmessage = message
-    if(embed != None):
-        embed.set_field_at(1, name="freigeschalten?", value="Ja", inline=False)
+    words = open("welcome/discord/welcome.txt", "r")
+    Lwords = []
+    count = 0
+    for line in words:
+        Lwords.append(line)
+        count += 1
+    number = randrange(0,count)
+    count = 0
+    text = Lwords[number].removesuffix("\n")
+    text = text.replace("Name","**" + author.name + "**")
+    await channel.send(text)
 
-        await embedmessage.edit(embed=embed)
-    #Hier wird Embed aktualisiert
+    words.close()
     return
 
 async def cmndmcname(message, name=None):
