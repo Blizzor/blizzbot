@@ -1,5 +1,6 @@
 #import discord
-#import mysql.connector
+import mysql.connector
+from modules import zz_init
 #test
 DBhost = zz_init.config().get_DBhost()
 DBuser = zz_init.config().get_DBuser()

@@ -114,6 +114,7 @@ async def gotverified(author, channel, bot):
     return
 
 async def cmndmcname(message, name=None):
+    ID = None
     if message.raw_mentions:
         ID = message.raw_mentions[0]
         sql = "SELECT minecraft_name FROM mcnames WHERE discord_id ='" + str(ID) + "'"
@@ -181,6 +182,7 @@ async def switchrank(payload, bot):
     return
 
 async def cmndrank(message, name=None):
+    ID = None
     if message.raw_mentions:
         ID = message.raw_mentions[0]
         sql = "SELECT points FROM ranking WHERE discord_id ='" + str(ID) + "'"
