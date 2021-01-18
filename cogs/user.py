@@ -106,6 +106,11 @@ class MembersCog(commands.Cog):
     @commands.guild_only()
     async def instagram(self, ctx):
         await ctx.message.channel.send("https://blizzor.de/instagram")
+    
+    @commands.command()
+    @commands.guild_only(aliases=["tt"])
+    async def tiktok(self, ctx):
+        await ctx.message.channel.send("https://www.tiktok.com/@blizzor")
 
     @commands.command()
     @commands.guild_only()
