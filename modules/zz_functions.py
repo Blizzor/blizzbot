@@ -62,9 +62,7 @@ async def cmndmc(message, client, name=None):
         #await message.channel.send(uuid)
         sql = "SELECT * FROM mcnames WHERE discord_id ='" + str(message.author.id) + "'"
 
-        mycursor.execute(sql)
-
-        myresult = mycursor.fetchall()
+        myresult = await dbcommit(sql)
         if(myresult):
             sql = "UPDATE mcnames SET minecraft_name = %s, uuid = %s WHERE discord_id = %s"
             val = (mcinfo['name'], uuid, message.author.id)
@@ -83,7 +81,7 @@ async def cmndmc(message, client, name=None):
             sql = "INSERT INTO mcnames (discord_id, minecraft_name, uuid, isWhitelistedYoutube, isWhitelistedTwitch) VALUES (%s, %s, %s, %s, %s)"
             val = (message.author.id, mcinfo['name'], uuid, whitelistedyoutube, whitelistedtwitch)
             await message.channel.send("Dein Minecraftname **" + name + "** wurde erfolgreich hinzugefügt.")
-        mycursor.execute(sql, val)
+        await dbcommit(sql, val)
         mydb.commit()
     else:
         await message.channel.send("Der Minecraftname **" + name + "** existiert nicht.")
@@ -116,8 +114,6 @@ async def gotverified(author, channel, bot):
     return
 
 async def cmndmcname(message, name=None):
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
     if message.raw_mentions:
         ID = message.raw_mentions[0]
         sql = "SELECT minecraft_name FROM mcnames WHERE discord_id ='" + str(ID) + "'"
@@ -126,8 +122,7 @@ async def cmndmcname(message, name=None):
         sql = "SELECT minecraft_name FROM mcnames WHERE discord_id ='" + str(ID) + "'"
     else:
         sql = "SELECT minecraft_name FROM mcnames WHERE discord_id ='" + str(message.author.id) + "'"
-    mycursor.execute(sql)
-    myresult = mycursor.fetchone()
+    myresult = await dbcommitfone(sql)
     if myresult:
         if name or message.raw_mentions:
             if message.raw_mentions:
@@ -145,8 +140,6 @@ async def cmndmcname(message, name=None):
     return
 
 async def switchrank(payload, bot):
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
     Rang = None
     Ziel = None
     Zielname = None
@@ -169,8 +162,7 @@ async def switchrank(payload, bot):
 
     if(Rangexists):
         sql = "SELECT points, discord_id FROM ranking ORDER BY points DESC"
-        mycursor.execute(sql)
-        myresult2 = mycursor.fetchall()
+        myresult2 = await dbcommit(sql)
 
         i = 1
         for p in myresult2:
@@ -185,14 +177,10 @@ async def switchrank(payload, bot):
         await message.edit(embed=embed)
 
     await message.remove_reaction(payload.emoji, payload.member)
-        #print(Zielname)
-        #print(Zielexp)
 
     return
 
 async def cmndrank(message, name=None):
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
     if message.raw_mentions:
         ID = message.raw_mentions[0]
         sql = "SELECT points FROM ranking WHERE discord_id ='" + str(ID) + "'"
@@ -201,12 +189,10 @@ async def cmndrank(message, name=None):
         sql = "SELECT points FROM ranking WHERE discord_id ='" + str(ID) + "'"
     else:
         sql = "SELECT points FROM ranking WHERE discord_id ='" + str(message.author.id) + "'"
-    mycursor.execute(sql)
-    myresult = mycursor.fetchone()
+    myresult = await dbcommit(sql)
 
     sql = "SELECT points, discord_id FROM ranking ORDER BY points DESC"
-    mycursor.execute(sql)
-    myresult2 = mycursor.fetchall()
+    myresult2 = await dbcommit(sql)
     count = 1
     rank = 0
     thumbnailurl = None
@@ -246,12 +232,8 @@ async def cmndrank(message, name=None):
     return
 
 async def cmndranking(message):
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
-
     sql = "SELECT points, discord_id FROM ranking ORDER BY points DESC"
-    mycursor.execute(sql)
-    myresult = mycursor.fetchall()
+    myresult = await dbcommit(sql)
     count = 1
     rank = 0
     color = 00
@@ -276,11 +258,8 @@ async def cmndshutdown(bot):
     exit()
 
 async def cmndcheckdb(message, client):
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
     sql = "SHOW TABLES"
-    mycursor.execute(sql)
-    myresult = mycursor.fetchall()
+    myresult = await dbcommit(sql)
     count = 0
     text = "```"
     for x in myresult:
@@ -300,11 +279,9 @@ async def cmndcheckdb(message, client):
             sql = "SELECT * FROM " + x[0]
             tablename = x[0]
         count = count + 1
-    mycursor.execute(sql)
-    myresult = mycursor.fetchall()
+    myresult = await dbcommit(sql)
     sql2 = "SHOW FIELDS FROM " + tablename
-    mycursor.execute(sql2)
-    myresult2 = mycursor.fetchall()
+    myresult2 = await dbcommit(sql)
     list = []
     for t in myresult2:
         list.append(t[0])
@@ -361,15 +338,12 @@ async def cmndwhitelist(message):
     return
 
 async def getexp(message):
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
     sql = "SELECT points FROM ranking WHERE discord_id ='" + str(message.author.id) + "'"
     #Berechnung EXP
     exp = (len(message.content)-2)/5
     if(exp > 10):
         exp = 10
-    mycursor.execute(sql)
-    myresult = mycursor.fetchone()
+    myresult = await dbcommitfone(sql)
 
     if myresult:
         sql = "UPDATE ranking SET points = %s WHERE discord_id = %s"
@@ -377,14 +351,13 @@ async def getexp(message):
     else:
         sql = "INSERT INTO ranking (discord_id, points) VALUES (%s, %s)"
         val = (message.author.id, exp)
-    mycursor.execute(sql, val)
-    mydb.commit()
+    await dbcommit(sql, val)
     return
 
 async def resetrank(message, name=None):
 
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
+    sql = None
+    val = None
     if message.raw_mentions:
         ID = message.raw_mentions[0]
         sql = "UPDATE ranking SET points = %s WHERE discord_id = %s"
@@ -394,42 +367,26 @@ async def resetrank(message, name=None):
         ID = await getmemberid(message, name)
         sql = "UPDATE ranking SET points = %s WHERE discord_id = %s"
         val = (0, str(ID))
-    mycursor.execute(sql, val)
-    mydb.commit()
-
+    await dbcommit(sql, val)
     return
 
 async def resetuser(message, name=None):
 
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
     sql = "DELETE FROM mcnames WHERE discord_id = " + str(name)
-
-    mycursor.execute(sql)
-    mydb.commit()
+    await dbcommit(sql)  
 
     sql = "DELETE FROM ranking WHERE discord_id = " + str(name)
-
-    mycursor.execute(sql)
-    mydb.commit()
+    await dbcommit(sql)
 
     return
 
 async def customdbcommand(message, command):
-
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
-    mycursor.execute(command)
-    mydb.commit()
-
+    await dbcommit(command)
     return
 
 async def syncwhitelist():
-    mydb = zz_init.getdb()
-    mycursor = mydb.cursor()
     sql = "SELECT minecraft_name,uuid,isWhitelistedYoutube,isWhitelistedTwitch FROM mcnames"
-    mycursor.execute(sql)
-    myresult = mycursor.fetchall()
+    myresult = await dbcommit(sql)
     whitelistyoutube = []
     whitelisttwitch = []
     for x in myresult:
@@ -532,3 +489,33 @@ async def blacklist():
 #async def is_verified(ctx):
 #    check = await checkrole(ctx.author.roles, IDgrpverificate)
 #    return check
+
+async def dbcommit(sqlcommand, value = None):
+    mydb = zz_init.getdb()
+    if(mydb.is_connected()):
+        print("Verbindung zur DB vorhanden")
+    else:
+        print("Verbindung zur DB verloren...wird reconnected")
+        mydb.reconnect(attempts=3, delay=5)
+        mydb = zz_init.getdb()
+    mycursor = mydb.cursor()
+    if(value):
+        mycursor.execute(sqlcommand, value)
+    else:
+        mycursor.execute(sqlcommand)
+    return mycursor.fetchall()
+
+async def dbcommitfone(sqlcommand, value = None):
+    mydb = zz_init.getdb()
+    if(mydb.is_connected()):
+        print("Verbindung zur DB vorhanden")
+    else:
+        print("Verbindung zur DB verloren...wird reconnected")
+        mydb.reconnect(attempts=3, delay=5)
+        mydb = zz_init.getdb()
+    mycursor = mydb.cursor()
+    if(value):
+        mycursor.execute(sqlcommand, value)
+    else:
+        mycursor.execute(sqlcommand)
+    return mycursor.fetchone()
