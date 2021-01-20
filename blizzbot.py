@@ -269,7 +269,6 @@ async def on_message_delete(message):
     if(message):
 
         channel = discord.utils.get(message.guild.text_channels, id=IDchannellogs)
-        await channel.send(message)
 
         embed = discord.Embed(title="Gelöschte Nachricht", color=0xedbc5d)
         if(message.author.avatar_url):
