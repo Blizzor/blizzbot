@@ -266,26 +266,26 @@ async def on_voice_state_update(member, before, after):
 
 @bot.event
 async def on_message_delete(message):
-    print(message)
-    channel = discord.utils.get(message.guild.text_channels, id=IDchannellogs)
+    if(message):
+        channel = discord.utils.get(message.guild.text_channels, id=IDchannellogs)
 
-    embed = discord.Embed(title="Gelöschte Nachricht", color=0xedbc5d)
-    if(message.author.avatar_url):
-        embed.set_thumbnail(url=message.author.avatar_url)
-    if(message.author.name):
-        embed.add_field(name="Name", value=message.author.name, inline=True)
-    else:
-        embed.add_field(name="Name", value="Name unbekannt", inline=True)
-    if(message.channel.name):
-        embed.add_field(name="Channel", value=message.channel.name, inline=True)
-    else:
-        embed.add_field(name="Channel", value="Channel unbekannt???", inline=True)
-    if(message.content):
-        embed.add_field(name="Inhalt", value=message.content, inline=False)
-    else:
-        embed.add_field(name="Inhalt", value="Inhalt nicht auslesbar", inline=False)
+        embed = discord.Embed(title="Gelöschte Nachricht", color=0xedbc5d)
+        if(message.author.avatar_url):
+            embed.set_thumbnail(url=message.author.avatar_url)
+        if(message.author.name):
+            embed.add_field(name="Name", value=message.author.name, inline=True)
+        else:
+            embed.add_field(name="Name", value="Name unbekannt", inline=True)
+        if(message.channel.name):
+            embed.add_field(name="Channel", value=message.channel.name, inline=True)
+        else:
+            embed.add_field(name="Channel", value="Channel unbekannt???", inline=True)
+        if(message.content):
+            embed.add_field(name="Inhalt", value=message.content, inline=False)
+        else:
+            embed.add_field(name="Inhalt", value="Inhalt nicht auslesbar", inline=False)
 
-    await channel.send(embed=embed)
+        await channel.send(embed=embed)
 
     return
 
