@@ -270,8 +270,8 @@ async def on_message_delete(message):
 
 
     embed = discord.Embed(title="Gelöschte Nachricht", color=0xedbc5d)
-    embed.set_thumbnail(url=message.author.avatar_url)
-    
+    if(message.author.avatar_url):
+        embed.set_thumbnail(url=message.author.avatar_url)
     if(message.author.name):
         embed.add_field(name="Name", value=message.author.name, inline=True)
     else:
