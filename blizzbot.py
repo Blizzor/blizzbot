@@ -111,7 +111,7 @@ async def on_message(message):
 async def on_raw_reaction_add(payload):
 
     if payload.channel_id == IDchannelverificate:
-        if payload.emoji.id == 704707230137581658: #testserverid: 596435950469513216  #serverid: 704707230137581658
+        if payload.emoji.id == 596435950469513216: #testserverid: 596435950469513216  #serverid: 704707230137581658
             for i in bot.guilds[0].roles:
                 if i.id == IDgrpverificate or i.id == IDgrpnotify:
                     if i.id == IDgrpverificate:
@@ -267,18 +267,16 @@ async def on_voice_state_update(member, before, after):
 @bot.event
 async def on_message_delete(message):
     channel = discord.utils.get(message.guild.text_channels, id=IDchannellogs)
-    #print(channel)
-    #await channel.send(message.content)
-    #print("test")
 
-    #text="```\n"
+
     embed = discord.Embed(title="Gelöschte Nachricht", color=0xedbc5d)
     embed.set_thumbnail(url=message.author.avatar_url)
     embed.add_field(name="Name", value=message.author.name, inline=True)
     embed.add_field(name="Channel", value=message.channel.name, inline=True)
-    embed.add_field(name="Inhalt", value=message.content, inline=False)
-    #text += message.author.name + "\n"
-    #text += message.content + "\n"
+    if(message.content):
+        embed.add_field(name="Inhalt", value=message.content, inline=False)
+    else:
+        embed.add_field(name="Inhalt", value="Inhalt nicht auslesbar", inline=False)
 
     await channel.send(embed=embed)
 
