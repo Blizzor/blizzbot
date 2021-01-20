@@ -20,6 +20,3 @@ Name setzt Aquaknarre ein! Das war sehr effektiv!
 Name setzt Serverjoin ein! Huch. Bin ich hier richtig?
 Error. Name404.
 Console.Writeline(Name joined the Server)
-
-
-

@@ -111,11 +111,13 @@ async def on_message(message):
 async def on_raw_reaction_add(payload):
 
     if payload.channel_id == IDchannelverificate:
-        if payload.emoji.id == 704707230137581658:
+        if payload.emoji.id == 704707230137581658: #testserverid: 596435950469513216  #serverid: 704707230137581658
             for i in bot.guilds[0].roles:
                 if i.id == IDgrpverificate or i.id == IDgrpnotify:
-                    await payload.member.add_roles(i)
-                    await zz_functions.gotverified(payload.member, bot.get_channel(IDchannelstandard), bot)
+                    if i.id == IDgrpverificate:
+                        await zz_functions.gotverified(payload.member, bot.get_channel(IDchannelstandard), bot)
+                    else:
+                        await payload.member.add_roles(i)
 
     if(payload.member != bot.user):
         if payload.channel_id == IDchannelcommand:
