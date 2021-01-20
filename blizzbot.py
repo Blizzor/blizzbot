@@ -111,7 +111,7 @@ async def on_message(message):
 async def on_raw_reaction_add(payload):
 
     if payload.channel_id == IDchannelverificate:
-        if payload.emoji.id == 596435950469513216: #testserverid: 596435950469513216  #serverid: 704707230137581658
+        if payload.emoji.id == 704707230137581658: #testserverid: 596435950469513216  #serverid: 704707230137581658
             for i in bot.guilds[0].roles:
                 if i.id == IDgrpverificate or i.id == IDgrpnotify:
                     if i.id == IDgrpverificate:
