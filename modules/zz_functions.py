@@ -494,9 +494,7 @@ async def blacklist():
 
 async def dbcommit(sqlcommand, value = None):
     mydb = zz_init.getdb()
-    if(mydb.is_connected()):
-        print("Verbindung zur DB vorhanden")
-    else:
+    if(not mydb.is_connected()):
         print("Verbindung zur DB verloren...wird reconnected")
         mydb.reconnect(attempts=3, delay=5)
         mydb = zz_init.getdb()
