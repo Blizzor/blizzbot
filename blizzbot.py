@@ -267,7 +267,7 @@ async def on_voice_state_update(member, before, after):
 @bot.event
 async def on_message_delete(message):
     channel = discord.utils.get(message.guild.text_channels, id=IDchannellogs)
-
+    print(message)
 
     embed = discord.Embed(title="Gelöschte Nachricht", color=0xedbc5d)
     if(message.author.avatar_url):
