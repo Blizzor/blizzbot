@@ -185,13 +185,12 @@ async def cmndrank(message, name=None):
     ID = None
     if message.raw_mentions:
         ID = message.raw_mentions[0]
-        sql = "SELECT points FROM ranking WHERE discord_id ='" + str(ID) + "'"
     elif name:
         ID = await getmemberid(message, name)
-        sql = "SELECT points FROM ranking WHERE discord_id ='" + str(ID) + "'"
     else:
-        sql = "SELECT points FROM ranking WHERE discord_id ='" + str(message.author.id) + "'"
-    myresult = await dbcommit(sql)
+        ID = message.author.id
+    sql = "SELECT points FROM ranking WHERE discord_id ='" + str(ID) + "'"
+    myresult = await dbcommitfone(sql)
 
     sql = "SELECT points, discord_id FROM ranking ORDER BY points DESC"
     myresult2 = await dbcommit(sql)
