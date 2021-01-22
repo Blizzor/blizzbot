@@ -5,6 +5,8 @@ from modules import zz_init
 
 IDchanneladmin = zz_init.config().get_IDchanneladmin()
 IDchannelcommand = zz_init.config().get_IDchannelcommand()
+IDchannelcommand = zz_init.config().get_IDchannelcommand()
+IDchannelstandard = zz_init.config().get_IDchannelstandard()
 
 class MembersCog(commands.Cog):
     def __init__(self, bot):
@@ -77,6 +79,12 @@ class MembersCog(commands.Cog):
         if ctx.message.channel.id == IDchanneladmin:
             await zz_functions.cmndwhitelist(ctx.message)
 
+    @commands.command()
+    @commands.guild_only()
+    async def say(self, ctx, arg=None):
+        if ctx.message.channel.id == IDchanneladmin:
+            channel = self.bot.get_channel(IDchannelstandard)
+            await channel.send(arg)
 #    @commands.command()
 #    @commands.guild_only()
 #    async def checkdb(self, ctx):
