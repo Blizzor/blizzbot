@@ -115,6 +115,7 @@ async def on_raw_reaction_add(payload):
             for i in bot.guilds[0].roles:
                 if i.id == IDgrpverificate or i.id == IDgrpnotify:
                     if i.id == IDgrpverificate:
+                        await payload.member.add_roles(i)
                         await zz_functions.gotverified(payload.member, bot.get_channel(IDchannelstandard), bot)
                     else:
                         await payload.member.add_roles(i)

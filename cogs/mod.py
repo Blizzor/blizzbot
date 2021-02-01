@@ -71,7 +71,7 @@ class MembersCog(commands.Cog):
     @commands.guild_only()
     async def sd(self, ctx):
         if ctx.message.channel.id == IDchanneladmin:
-            await zz_functions.cmndshutdown(bot)
+            await zz_functions.cmndshutdown(self.bot)
 
     @commands.command()
     @commands.guild_only()
