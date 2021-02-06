@@ -41,6 +41,10 @@ if not path.exists('config/config.json'):
         DBpasswd = input()
         print("Bitte geben Sie den DB-Namen ein:")
         DBdatabase = input()
+        print("Bitte geben Sie die Pterodactyl Domain ein (Form: https://example.com/ | optional):")
+        pterodactyl_domain = input()
+        print("Bitte geben Sie den Pterodactyl API Key ein (optional):")
+        pterodactyl_api_key = input()
 
         jsonstructure['discord'].append({
         'token': token,
@@ -55,7 +59,9 @@ if not path.exists('config/config.json'):
         'DBhost': DBhost,
         'DBuser': DBuser,
         'DBpasswd': DBpasswd,
-        'DBdatabase': DBdatabase
+        'DBdatabase': DBdatabase,
+        'pterodactyl_domain': pterodactyl_domain,
+        'pterodactyl_apikey': pterodactyl_api_key
         })
 
     elif input1 =="n" or input1 == "N":
@@ -73,7 +79,9 @@ if not path.exists('config/config.json'):
         'DBhost': 'Platzhalter',
         'DBuser': 'Platzhalter',
         'DBpasswd': 'Platzhalter',
-        'DBdatabase': 'Platzhalter'
+        'DBdatabase': 'Platzhalter',
+        'pterodactyl_domain': '',
+        'pterodactyl_apikey': ''
         })
 
     else:
@@ -94,6 +102,8 @@ if not os.path.exists('whitelist/youtube/paths.txt'):
         os.mkdir('whitelist/youtube')
     paths = open("whitelist/youtube/paths.txt", "a")
     paths.close()
+    paths = open("whitelist/youtube/pterodactyl.txt", "a")
+    paths.close()
 
 if not os.path.exists('whitelist/twitch/paths.txt'):
     if not os.path.exists('whitelist'):
@@ -101,6 +111,8 @@ if not os.path.exists('whitelist/twitch/paths.txt'):
     if not os.path.exists('whitelist/twitch'):
         os.mkdir('whitelist/twitch')
     paths = open("whitelist/twitch/paths.txt", "a")
+    paths.close()
+    paths = open("whitelist/twitch/pterodactyl.txt", "a")
     paths.close()
 
 if not os.path.exists('blacklist/discord/badwords.txt'):
