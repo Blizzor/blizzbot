@@ -440,7 +440,7 @@ async def syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch):
         serverid = parts[0]
         whitelistpath = parts[1]
 
-        await pterodactylwritefile(serverid, whitelistpath, whitelistyoutube, zz_init.config().get_pterodactyl_apikey())
+        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelistyoutube), zz_init.config().get_pterodactyl_apikey())
     paths.close()
 
     paths = open("whitelist/twitch/pterodactyl.txt", "r")
@@ -449,7 +449,7 @@ async def syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch):
         serverid = parts[0]
         whitelistpath = parts[1]
 
-        await pterodactylwritefile(serverid, whitelistpath, whitelisttwitch, zz_init.config().get_pterodactyl_apikey())
+        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelisttwitch), zz_init.config().get_pterodactyl_apikey())
     paths.close()
 
 async def pterodactylwritefile(serverid, path, data, apikey):
