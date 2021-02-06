@@ -2,6 +2,7 @@ import discord
 import requests
 import json
 import math
+import urllib.parse
 from modules import zz_init
 import time
 from os import path
@@ -387,34 +388,42 @@ async def customdbcommand(message, command):
 
 async def syncwhitelist():
     sql = "SELECT minecraft_name,uuid,isWhitelistedYoutube,isWhitelistedTwitch FROM mcnames"
-    myresult = await dbcommit(sql)
+    results = await dbcommit(sql)
     whitelistyoutube = []
     whitelisttwitch = []
-    for x in myresult:
+
+    for x in results:
         if x[2]:
             whitelistyoutube.append({
                 'uuid': x[1],
                 'name': x[0]
                 })
+    for x in results:
+        if x[3]:
+            whitelisttwitch.append({
+                'uuid': x[1],
+                'name': x[0]
+            })
 
     with open('whitelist/youtube/whitelist.json', 'w') as outfile:
-        json.dump(whitelistyoutube,outfile, indent=2)
+        json.dump(whitelistyoutube, outfile, indent=2)
+    outfile.close()
 
+    with open('whitelist/twitch/whitelist.json', 'w') as outfile:
+        json.dump(whitelisttwitch, outfile, indent=2)
+    outfile.close()
+
+    await syncwhitelistfiles()
+    await syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch)
+
+    return
+
+async def syncwhitelistfiles():
     #Kopiere Whitelist in verschiedene Ordner
     paths = open("whitelist/youtube/paths.txt", "r")
     for line in paths:
         copyfile('whitelist/youtube/whitelist.json', str(line.rstrip()) + 'whitelist.json')
     paths.close()
-
-    for x in myresult:
-        if x[3]:
-            whitelisttwitch.append({
-                'uuid': x[1],
-                'name': x[0]
-                })
-
-    with open('whitelist/twitch/whitelist.json', 'w') as outfile:
-        json.dump(whitelisttwitch,outfile, indent=2)
 
     #Kopiere Whitelist in verschiedene Ordner
     paths = open("whitelist/twitch/paths.txt", "r")
@@ -423,6 +432,30 @@ async def syncwhitelist():
     paths.close()
 
     return
+
+async def syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch):
+    paths = open("whitelist/youtube/pterodactyl.txt", "r")
+    for line in paths:
+        parts = line.split(" ")
+        serverid = parts[0]
+        whitelistpath = parts[1]
+
+        await pterodactylwritefile(serverid, whitelistpath, whitelistyoutube, zz_init.config().get_pterodactyl_apikey())
+    paths.close()
+
+    paths = open("whitelist/twitch/pterodactyl.txt", "r")
+    for line in paths:
+        parts = line.split(" ")
+        serverid = parts[0]
+        whitelistpath = parts[1]
+
+        await pterodactylwritefile(serverid, whitelistpath, whitelisttwitch, zz_init.config().get_pterodactyl_apikey())
+    paths.close()
+
+async def pterodactylwritefile(serverid, path, data, apikey):
+    url = zz_init.config().get_pterodactyl_domain() + 'api/client/servers/' + serverid + '/files/write?file='\
+          + urllib.parse.quote(path)
+    requests.post(url, data=data, headers={"Accept": "application/json", "Authorization": "Bearer " + apikey})
 
 async def getmemberid(message, name):
     guild = message.author.guild

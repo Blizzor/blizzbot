@@ -29,6 +29,8 @@ class config():
                 self.DBuser = p['DBuser']
                 self.DBpasswd = p['DBpasswd']
                 self.DBdatabase = p['DBdatabase']
+                self.pterodactyl_domain = p['pterodactyl_domain']
+                self.pterodactyl_apikey = p['pterodactyl_apikey']
 
     def get_token(self):
         return self.token
@@ -72,6 +74,10 @@ class config():
         return self.DBpasswd
     def get_DBdatabase(self):
         return self.DBdatabase
+    def get_pterodactyl_domain(self):
+        return self.pterodactyl_domain
+    def get_pterodactyl_apikey(self):
+        return self.pterodactyl_apikey
 
 mydb = mysql.connector.connect(
     host=config().get_DBhost(),
