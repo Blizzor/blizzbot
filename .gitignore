@@ -8,8 +8,7 @@ __pycache__/
 *.so
 
 # config folder
-config/
-config.json
+config/config.json
 
 
 # whitelist folder
