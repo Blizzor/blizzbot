@@ -80,7 +80,7 @@ class MembersCog(commands.Cog):
     @commands.command(aliases=["merchandise"])
     @commands.guild_only()
     async def merch(self, ctx):
-        await ctx.message.channel.send("https://elbster.de/2197-blizzor")
+        await ctx.message.channel.send("Ups. Der Store ging wohl kaputt. Waren bestimmt zu viele Verkäufe!")
 
     @commands.command(aliases=["yt"])
     @commands.guild_only()
