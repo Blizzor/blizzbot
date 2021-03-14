@@ -20,3 +20,8 @@ Name setzt Aquaknarre ein! Das war sehr effektiv!
 Name setzt Serverjoin ein! Huch. Bin ich hier richtig?
 Error. Name404.
 Console.Writeline(Name joined the Server)
+Console.Writeline(Name joined the Server)
+print('Name ist dem Server beigetreten!')
+Unser neustes Servermitglied ist: Name!
+Name hat es so eben durch die Verifizierung geschafft!
+Diesem Server ist grade Name beigetreten.
