@@ -82,7 +82,7 @@ async def cmndmc(message, client, name=None):
             sql = "INSERT INTO mcnames (discord_id, minecraft_name, uuid, isWhitelistedYoutube, isWhitelistedTwitch) VALUES (%s, %s, %s, %s, %s)"
             val = (message.author.id, mcinfo['name'], uuid, whitelistedyoutube, whitelistedtwitch)
             await message.channel.send("Dein Minecraftname **" + name + "** wurde erfolgreich hinzugefügt.")
-        await dbcommit(sql, val)
+        await dbcommit(sql, val, 1)
         mydb.commit()
     else:
         await message.channel.send("Der Minecraftname **" + name + "** existiert nicht.")
@@ -283,12 +283,12 @@ async def cmndcheckdb(message, client):
         count = count + 1
     myresult = await dbcommit(sql)
     sql2 = "SHOW FIELDS FROM " + tablename
-    myresult2 = await dbcommit(sql)
+    myresult2 = await dbcommit(sql2)
     list = []
     for t in myresult2:
+        #print(t[0])
         list.append(t[0])
     text = ""
-
     for p in myresult:
         count = 0
         for q in p:
@@ -353,7 +353,7 @@ async def getexp(message):
     else:
         sql = "INSERT INTO ranking (discord_id, points) VALUES (%s, %s)"
         val = (message.author.id, exp)
-    await dbcommit(sql, val)
+    await dbcommit(sql, val, 1)
     return
 
 async def resetrank(message, name=None):
@@ -524,7 +524,7 @@ async def blacklist():
 #    check = await checkrole(ctx.author.roles, IDgrpverificate)
 #    return check
 
-async def dbcommit(sqlcommand, value = None):
+async def dbcommit(sqlcommand, value = None, nofetch = 0):
     mydb = zz_init.getdb()
     if(not mydb.is_connected()):
         print("Verbindung zur DB verloren...wird reconnected")
@@ -535,7 +535,8 @@ async def dbcommit(sqlcommand, value = None):
         mycursor.execute(sqlcommand, value)
     else:
         mycursor.execute(sqlcommand)
-    return mycursor.fetchall()
+    if(not nofetch):
+        return mycursor.fetchall()
 
 async def dbcommitfone(sqlcommand, value = None):
     mydb = zz_init.getdb()
