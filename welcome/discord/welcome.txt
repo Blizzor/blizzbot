@@ -31,8 +31,8 @@ Ist Name ein Bot? finden wir es heraus!
 Ein wildes Name
 Willkommen in der besten Community von Blizzor Name
 Uiii ein cooles neues Name
-Name hat es geschafft und ist in nun in der neuen Zeitzone
-Wie verhext! ein Name wurde beschworen
+Name hat es geschafft und ist nun in der neuen Zeitzone
+Wie verhext! Ein Name wurde beschworen
 Name fell from a high place
 Krass der die das Name ist wirklich hier!
 Kaum zu glauben... Name ist auch mal hier! Halllllloo!
@@ -41,6 +41,7 @@ Hallo Name, Blizzor hat mal ein PvP gegen Fabo gewonnen!
 Name hat Sektor 7B betreten und findet eine Blizzunity auf!
 1+1 = Ein Neues Name
 Habt ihr schon mal was von Name gehört? Ich noch nicht.
+Habt ihr schon mal was von Name gehört? Ich jetzt schon.
 Wie hat Name uns gefunden? Jetzt ist das Hauptquartier der Blizzunity aufgeflogen! Passt auf!
 Syntax Error: Name ist hier
 OMG! Name ist hier!!! Ich bin ein Fan!
@@ -50,4 +51,4 @@ Zwiebeln sind lecker, Angelringe sind rund und Name ist bunt.
 Ich bin ein Mensch, du auch Name? Beep Boop
 A wie Angelringe, B wie Blizzor, C wie Name
 Ich habe das Gerücht gehört das Name dem Server beigetreten ist.
-Hallo ich bin ein Mensch und heiße Blizzbot. Wer bist du Name?
+Hallo ich bin ein Bot und heiße Blizzbot. Wer bist du Name?
