@@ -15,11 +15,18 @@ ArrayIDgrpsubyoutube = zz_init.config().get_ArrayIDgrpsubyoutube()
 ArrayIDgrpsubtwitch = zz_init.config().get_ArrayIDgrpsubtwitch()
 
 async def cmndhelp(message):
-    await message.channel.send("""```
-!mc [Name] - Registriere deinen Minecraft-Account
-!mcname [Name] - Gibt deinen aktuellen Minecraft-Account wieder
-!rank [Name] - Gibt Erfahrung wieder
-!anfrage - Schreibe dem Bot eine Anfrage, die direkt an die Moderatoren privat weitergeleitet werden```""")
+    
+    
+    embed=discord.Embed(title="**Hilfe**", description="Hilfe zu allen Commands.")
+    embed.add_field(name="!mc [Name]", value="Registriere deinen Minecraft-Account.", inline=False)
+    embed.add_field(name="!mcname", value="Gibt deinen aktuellen Minecraft-Account wieder.", inline=False)
+    embed.add_field(name="!rank [Name]", value="Gibt den Rang des erwähnten users wieder.", inline=False)
+    embed.add_field(name="!anfrage", value="Schreibe dem Bot eine Anfrage, die direkt an die Moderatoren privat weitergeleitet werden.", inline=False)
+    embed.add_field(name="![yt/twitch/tiktok/instagram/shop/setup]", value="Gibt die zugehörigen links wieder.", inline=False)
+    embed.add_field(name="**Twitch Bot**", value="Hilfe zu den Commands vom Twitch bot", inline=False)
+    embed.add_field(name="!top10", value="Gibt die aktuellen Top10 der Watchtime liste wieder", inline=False)
+    embed.add_field(name="!watchtime [Twitch-Name]", value="Gibt die aktuelle watchtime des angegebenen nutzers wieder", inline=False)
+    await message.channel.send(embed=embed)    
     return
 
 async def newjoin(member):
@@ -47,7 +54,7 @@ async def cmndmc(message, client, name=None):
     mydb = zz_init.getdb()
     mycursor = mydb.cursor()
     if not name:
-        await message.channel.send("Bitte Minecraftname eingeben")
+        await message.channel.send("Bitte Minecraftname eingeben.")
         author = message.author
         def check(m):
             return m.author == message.author
@@ -67,7 +74,7 @@ async def cmndmc(message, client, name=None):
         if(myresult):
             sql = "UPDATE mcnames SET minecraft_name = %s, uuid = %s WHERE discord_id = %s"
             val = (mcinfo['name'], uuid, message.author.id)
-            await message.channel.send("Dein Minecraftname **" + name + "** wurde erfolgreich aktualisiert.")
+            await message.channel.send(f"Dein Minecraftname **{name}** wurde erfolgreich aktualisiert.")
         else:
             whitelistedyoutube = False
             whitelistedtwitch = True
@@ -85,7 +92,7 @@ async def cmndmc(message, client, name=None):
         await dbcommit(sql, val, 1)
         mydb.commit()
     else:
-        await message.channel.send("Der Minecraftname **" + name + "** existiert nicht.")
+        await message.channel.send(f"Ich konnte deinen Minecraftname **{name}** nicht finden.")
     return
 
 async def cmndnotify(message, guild):
@@ -99,19 +106,10 @@ async def cmndnotify(message, guild):
     return
 
 async def gotverified(author, channel, bot):
-    words = open("welcome/discord/welcome.txt", "r")
-    Lwords = []
-    count = 0
-    for line in words:
-        Lwords.append(line)
-        count += 1
-    number = randrange(0,count)
-    count = 0
-    text = Lwords[number].removesuffix("\n")
-    text = text.replace("Name","**" + author.name + "**")
+    lines = open("welcome/discord/welcome.txt", "r").read().splitlines()
+    myline = str(random.choice(lines)).strip
+    text = myline.replace("Name",f"**{author.name}**")
     await channel.send(text)
-
-    words.close()
     return
 
 async def cmndmcname(message, name=None):
@@ -138,7 +136,7 @@ async def cmndmcname(message, name=None):
         embed.add_field(name="Minecraft-Name", value=str(myresult[0]), inline=True)
         await message.channel.send(embed=embed)
     else:
-        await message.channel.send("Dein Minecraft Name konnte nicht gefunden werden")
+        await message.channel.send("Dein Minecraft Name konnte nicht gefunden werden.")
     return
 
 async def switchrank(payload, bot):
@@ -512,11 +510,13 @@ async def removeblacklistword(message, arg):
 
 async def blacklist():
 
-    file =(open("blacklist/discord/badwords.txt", "r"))
+    file = open("blacklist/discord/badwords.txt", "r")
     content = ""
     for line in file:
+        if len(content)+len(line) > 1900:
+            return f"{content}\n--Die blacklist ist ab hier zu groß--"
         content += line
-
+        
     return content
 
 
