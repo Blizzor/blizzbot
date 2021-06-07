@@ -71,42 +71,49 @@ async def anfrage(ctx):
 
 @bot.event
 async def on_message(message):
-    await bot.process_commands(message)
-    filter = True
-    if "http" in message.content and message.guild:
-        if await zz_functions.checkrole(message.author.roles, IDgrpverificate):
-            for i in ArraynoFilter:
-                if await zz_functions.checkrole(message.author.roles, i):
-                    filter = False
-            if filter:
+    if not message.channel.__contains__("Direct Message with"):
+        await bot.process_commands(message)
+        filter = True
+        if "http" in message.content and message.guild:
+            if await zz_functions.checkrole(message.author.roles, IDgrpverificate):
+                for i in ArraynoFilter:
+                    if await zz_functions.checkrole(message.author.roles, i):
+                        filter = False
+                if filter:
+                    await message.delete()
+
+        if message.guild and message.author != bot.user and message.channel.id != IDchanneladmin:
+            if await zz_functions.checkwords(message):
                 await message.delete()
-
-    if message.guild and message.author != bot.user and message.channel.id != IDchanneladmin:
-        if await zz_functions.checkwords(message):
+                try:
+                await message.author.create_dm()
+                if len(message.content) > 1500:
+                    await message.author.dm_channel.send(f"Ihre Nachricht mit dem Inhalt **{message.content}** wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
+                else:
+                    await message.author.dm_channel.send("Ihre Nachricht wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
+                except:
+                pass
+            
+        if message.channel.id == IDchannelverificate and message.content != "!zz":
             await message.delete()
-            await message.author.create_dm()
-            await message.author.dm_channel.send("Ihre Nachricht mit dem Inhalt **" + message.content + "** wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
 
-    if message.channel.id == IDchannelverificate and message.content != "!zz":
-        await message.delete()
-
-    if message.author != bot.user and message.guild and message.channel.id != IDchannelcommand and message.channel.category_id != IDcategorytext:
-        await zz_functions.getexp(message)
-        number = randrange(0,1000)
-        if(number == 5):
-            await message.add_reaction('<:ZZBlizzor:493814042780237824>')
+        if message.author != bot.user and message.guild and message.channel.id != IDchannelcommand and message.channel.category_id != IDcategorytext:
+            await zz_functions.getexp(message)
+            number = randrange(0, 1000)
+            if(number == 5):
+                await message.add_reaction('<:ZZBlizzor:493814042780237824>')
 
 
-#    if message.author != bot.user and not message.guild:
-#        if message.content == '!zz':
-#            for i in bot.guilds[0].members:
-#                if i.id == message.author.id:
-#                    for j in bot.guilds[0].roles:
-#                        if j.id == IDgrpverificate:
-#                            await i.add_roles(j)
-#                    await message.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
-#                    await zz_functions.gotverified(message.author, bot.get_channel(IDchannelstandard), bot)
-
+        # if message.author != bot.user and not message.guild:
+        #     if message.content == '!zz':
+        #         for i in bot.guilds[0].members:
+        #             if i.id == message.author.id:
+        #                 for j in bot.guilds[0].roles:
+        #                     if j.id == IDgrpverificate:
+        #                         await i.add_roles(j)
+        #                 await message.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
+        #                 await zz_functions.gotverified(message.author, bot.get_channel(IDchannelstandard), bot)
+        
 @bot.event
 async def on_raw_reaction_add(payload):
 
