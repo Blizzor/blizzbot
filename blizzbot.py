@@ -290,6 +290,10 @@ async def on_message_delete(message):
         else:
             embed.add_field(name="Channel", value="Channel unbekannt???", inline=True)
         if(message.content):
+          if len(message.content) > 1000:
+            embed.add_field(name="Inhalt", value=message.content[:1000], inline=False)
+            embed.add_field(name="_ _", value=message.content[1000:], inline=False)
+          else:
             embed.add_field(name="Inhalt", value=message.content, inline=False)
         else:
             embed.add_field(name="Inhalt", value="Inhalt nicht auslesbar", inline=False)
