@@ -22,7 +22,7 @@ async def cmndhelp(message):
     embed.add_field(name="!mcname", value="Gibt deinen aktuellen Minecraft-Account wieder.", inline=False)
     embed.add_field(name="!rank [Name]", value="Gibt den Rang des erwähnten users wieder.", inline=False)
     embed.add_field(name="!anfrage", value="Schreibe dem Bot eine Anfrage, die direkt an die Moderatoren privat weitergeleitet werden.", inline=False)
-    embed.add_field(name="![yt/twitch/tiktok/instagram/shop/setup]", value="Gibt die zugehörigen links wieder.", inline=False)
+    embed.add_field(name="![yt/twitch/tiktok/instagram/shop/setup/github]", value="Gibt die zugehörigen links wieder.", inline=False)
     embed.add_field(name="**Twitch Bot**", value="Hilfe zu den Commands vom Twitch bot", inline=False)
     embed.add_field(name="!top10", value="Gibt die aktuellen Top10 der Watchtime liste wieder", inline=False)
     embed.add_field(name="!watchtime [Twitch-Name]", value="Gibt die aktuelle watchtime des angegebenen nutzers wieder", inline=False)
