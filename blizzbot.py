@@ -86,13 +86,13 @@ async def on_message(message):
             if await zz_functions.checkwords(message):
                 await message.delete()
                 try:
-                await message.author.create_dm()
-                if len(message.content) > 1500:
-                    await message.author.dm_channel.send(f"Ihre Nachricht mit dem Inhalt **{message.content}** wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
-                else:
-                    await message.author.dm_channel.send("Ihre Nachricht wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
+                  await message.author.create_dm()
+                  if len(message.content) > 1500:
+                      await message.author.dm_channel.send(f"Ihre Nachricht mit dem Inhalt **{message.content}** wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
+                  else:
+                      await message.author.dm_channel.send("Ihre Nachricht wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
                 except:
-                pass
+                  pass
             
         if message.channel.id == IDchannelverificate and message.content != "!zz":
             await message.delete()
