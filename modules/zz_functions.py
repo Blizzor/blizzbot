@@ -84,6 +84,7 @@ async def cmndmc(message, client, name=None):
             await message.channel.send("Dein Minecraftname **" + name + "** wurde erfolgreich hinzugefügt.")
         await dbcommit(sql, val, 1)
         mydb.commit()
+        await syncwhitelist()
     else:
         await message.channel.send("Der Minecraftname **" + name + "** existiert nicht.")
     return
