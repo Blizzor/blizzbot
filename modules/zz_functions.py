@@ -119,22 +119,22 @@ async def cmndmcname(message, name=None):
     ID = None
     if message.raw_mentions:
         ID = message.raw_mentions[0]
-        sql = "SELECT minecraft_name FROM mcnames WHERE discord_id ='" + str(ID) + "'"
+        sql = "SELECT minecraft_name, uuid FROM mcnames WHERE discord_id ='" + str(ID) + "'"
     elif name:
         ID = await getmemberid(message, name)
-        sql = "SELECT minecraft_name FROM mcnames WHERE discord_id ='" + str(ID) + "'"
+        sql = "SELECT minecraft_name, uuid FROM mcnames WHERE discord_id ='" + str(ID) + "'"
     else:
-        sql = "SELECT minecraft_name FROM mcnames WHERE discord_id ='" + str(message.author.id) + "'"
+        sql = "SELECT minecraft_name, uuid FROM mcnames WHERE discord_id ='" + str(message.author.id) + "'"
     myresult = await dbcommitfone(sql)
     if myresult:
         if name or message.raw_mentions:
             if message.raw_mentions:
                 name = message.guild.get_member(ID).name
             embed = discord.Embed(title=name, color=0xedbc5d)
-            embed.set_thumbnail(url=message.guild.get_member(ID).avatar_url)
+            embed.set_thumbnail(url="https://crafatar.com/renders/body/" + myresult[1] + "?overlay")
         else:
             embed = discord.Embed(title=message.author.name, color=0xedbc5d)
-            embed.set_thumbnail(url=message.author.avatar_url)
+            embed.set_thumbnail(url="https://crafatar.com/renders/body/" + myresult[1] + "?overlay")
 
         embed.add_field(name="Minecraft-Name", value=str(myresult[0]), inline=True)
         await message.channel.send(embed=embed)
