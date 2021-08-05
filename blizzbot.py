@@ -10,7 +10,12 @@ from random import randrange
 from discord.ext import commands
 from discord.utils import get
 
-intents = discord.Intents.all()
+intents = discord.Intents()
+intents.messages = True
+intents.reactions = True
+intents.members = True
+intents.voice_states = True
+intents.emojis = True
 
 zz_init.logger()
 
