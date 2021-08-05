@@ -3,12 +3,6 @@ from discord.ext import commands
 from modules import zz_functions
 from modules import zz_init
 
-IDchannelstandard = zz_init.config().get_IDchannelstandard()
-IDchannelcommand = zz_init.config().get_IDchannelcommand()
-IDchannelverificate = zz_init.config().get_IDchannelverificate()
-IDgrpverificate = zz_init.config().get_IDgrpverificate()
-IDgrpnotify = zz_init.config().get_IDgrpnotify()
-
 class MembersCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -16,19 +10,19 @@ class MembersCog(commands.Cog):
     @commands.command(aliases=["hilfe"])
     @commands.guild_only()
     async def help(self, ctx):
-        if ctx.message.channel.id == IDchannelcommand:
+        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
             await zz_functions.cmndhelp(ctx.message)
 
     @commands.command()
     @commands.guild_only()
     async def notify(self, ctx):
-        if ctx.message.channel.id == IDchannelcommand:
+        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
             await zz_functions.cmndnotify(ctx.message, ctx.guild)
 
     @commands.command(aliases=["minecraftname"])
     @commands.guild_only()
     async def mcname(self, ctx, arg=None):
-        if ctx.message.channel.id == IDchannelcommand:
+        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
             if arg:
                 await zz_functions.cmndmcname(ctx.message, arg)
             else:
@@ -37,7 +31,7 @@ class MembersCog(commands.Cog):
     @commands.command(aliases=["rang"])
     @commands.guild_only()
     async def rank(self, ctx, arg=None):
-        if ctx.message.channel.id == IDchannelcommand:
+        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
             if arg:
                 await zz_functions.cmndrank(ctx.message, arg)
             else:
@@ -46,29 +40,29 @@ class MembersCog(commands.Cog):
     @commands.command(aliases=["rangliste"])
     @commands.guild_only()
     async def ranking(self, ctx):
-        if ctx.message.channel.id == IDchannelcommand:
+        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
             await zz_functions.cmndranking(ctx.message)
 
     @commands.command()
     @commands.guild_only()
     async def streamchannel(self, ctx):
-        if ctx.message.channel.id == IDchannelcommand:
+        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
             await zz_functions.cmndstreamchannel(ctx.message)
 
     @commands.command()
     @commands.guild_only()
     async def zz(self, ctx):
-        if ctx.message.channel.id == IDchannelverificate:
-            member = discord.utils.find(lambda m: m.id == IDgrpverificate, ctx.author.roles)
+        if ctx.message.channel.id == zz_init.config['IDchannelverificate']:
+            member = discord.utils.find(lambda m: m.id == zz_init.config['IDgrpverificate'], ctx.author.roles)
             await ctx.message.delete()
             await ctx.author.create_dm()
             if not member:
-                grpverify = ctx.guild.get_role(IDgrpverificate)
+                grpverify = ctx.guild.get_role(zz_init.config['IDgrpverificate'])
                 await ctx.author.add_roles(grpverify)
                 await ctx.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
-                grpnotify = ctx.guild.get_role(IDgrpnotify)
+                grpnotify = ctx.guild.get_role(zz_init.config['IDgrpnotify'])
                 await ctx.author.add_roles(grpnotify)
-                await zz_functions.gotverified(ctx.author, self.bot.get_channel(IDchannelstandard), self.bot)
+                await zz_functions.gotverified(ctx.author, self.bot.get_channel(zz_init.config['IDchannelstandard']), self.bot)
             else:
                 await ctx.author.dm_channel.send("Du bist bereits freigeschalten!")
 
@@ -106,7 +100,7 @@ class MembersCog(commands.Cog):
     @commands.guild_only()
     async def instagram(self, ctx):
         await ctx.message.channel.send("https://blizzor.de/instagram")
-    
+
     @commands.command(aliases=["tt"])
     @commands.guild_only()
     async def tiktok(self, ctx):

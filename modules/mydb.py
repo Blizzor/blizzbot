@@ -1,17 +1,12 @@
 #import discord
 import mysql.connector
 from modules import zz_init
-#test
-DBhost = zz_init.config().get_DBhost()
-DBuser = zz_init.config().get_DBuser()
-DBpasswd = zz_init.config().get_DBpasswd()
-DBdatabase = zz_init.config().get_DBdatabase()
 
 mydb = mysql.connector.connect(
-    host=DBhost,
-    user=DBuser,
-    passwd=DBpasswd,
-    database=DBdatabase,
+    host=zz_init.config['DBhost'],
+    user=zz_init.config['DBuser'],
+    passwd=zz_init.config['DBpasswd'],
+    database=zz_init.config['DBdatabase'],
     auth_plugin='mysql_native_password'
 )
 

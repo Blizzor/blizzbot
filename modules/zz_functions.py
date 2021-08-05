@@ -1,4 +1,4 @@
-import discord
+mydbimport discord
 import requests
 import json
 import math
@@ -8,11 +8,6 @@ import time
 from os import path
 from shutil import copyfile
 from random import randrange
-
-IDgrpverificate = zz_init.config().get_IDgrpverificate()
-IDgrpnotify = zz_init.config().get_IDgrpnotify()
-ArrayIDgrpsubyoutube = zz_init.config().get_ArrayIDgrpsubyoutube()
-ArrayIDgrpsubtwitch = zz_init.config().get_ArrayIDgrpsubtwitch()
 
 async def cmndhelp(message):
     await message.channel.send("""```
@@ -44,7 +39,7 @@ async def question(message, client):
     return VolleNachricht
 
 async def cmndmc(message, client, name=None):
-    mydb = zz_init.getdb()
+    mydb = zz_init.mydb
     mycursor = mydb.cursor()
     if not name:
         await message.channel.send("Bitte Minecraftname eingeben")
@@ -72,10 +67,10 @@ async def cmndmc(message, client, name=None):
             whitelistedyoutube = False
             whitelistedtwitch = True
             for role in message.author.roles:
-                for youtubeid in ArrayIDgrpsubyoutube:
+                for youtubeid in zz_init.config['ArrayIDgrpsubyoutube']:
                     if(role.id == youtubeid):
                         whitelistedyoutube = True
-                for twitchid in ArrayIDgrpsubtwitch:
+                for twitchid in zz_init.config['ArrayIDgrpsubtwitch']:
                     if(role.id == twitchid):
                         whitelistedtwitch = True
 
@@ -90,8 +85,8 @@ async def cmndmc(message, client, name=None):
     return
 
 async def cmndnotify(message, guild):
-    grpnotify = guild.get_role(IDgrpnotify)
-    if await checkrole(message.author.roles, IDgrpnotify):
+    grpnotify = guild.get_role(zz_init.config['IDgrpnotify'])
+    if await checkrole(message.author.roles, zz_init.config['IDgrpnotify']):
         await message.author.remove_roles(grpnotify)
         #NIMM GRUPPE WEG
     else:
@@ -314,7 +309,7 @@ async def cmndstreamchannel(message):
     emptychannels = False
     cpchannel = channels[0]
     for j in channels:
-        if j.category.id == zz_init.config().get_IDcategoryvoice(): # Wenn Kategory richtig ist
+        if j.category.id == zz_init.config['IDcategoryvoice']: # Wenn Kategory richtig ist
             cpchannel = j
     await cpchannel.clone(name="Stream-Channel")
     channels = (message.author.guild.voice_channels)
@@ -376,7 +371,7 @@ async def resetrank(message, name=None):
 async def resetuser(message, name=None):
 
     sql = "DELETE FROM mcnames WHERE discord_id = " + str(name)
-    await dbcommit(sql)  
+    await dbcommit(sql)
 
     sql = "DELETE FROM ranking WHERE discord_id = " + str(name)
     await dbcommit(sql)
@@ -441,7 +436,7 @@ async def syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch):
         serverid = parts[0]
         whitelistpath = parts[1]
 
-        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelistyoutube), zz_init.config().get_pterodactyl_apikey())
+        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelistyoutube), zz_init.config['pterodactyl_apikey'])
     paths.close()
 
     paths = open("whitelist/twitch/pterodactyl.txt", "r")
@@ -450,11 +445,11 @@ async def syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch):
         serverid = parts[0]
         whitelistpath = parts[1]
 
-        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelisttwitch), zz_init.config().get_pterodactyl_apikey())
+        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelisttwitch), zz_init.config['pterodactyl_apikey'])
     paths.close()
 
 async def pterodactylwritefile(serverid, path, data, apikey):
-    url = zz_init.config().get_pterodactyl_domain() + 'api/client/servers/' + serverid + '/files/write?file='\
+    url = zz_init.config['pterodactyl_domain'] + 'api/client/servers/' + serverid + '/files/write?file='\
           + urllib.parse.quote(path)
     requests.post(url, data=data, headers={"Accept": "application/json", "Authorization": "Bearer " + apikey})
 
@@ -526,11 +521,11 @@ async def blacklist():
 #    return check
 
 async def dbcommit(sqlcommand, value = None, nofetch = 0):
-    mydb = zz_init.getdb()
+    mydb = zz_init.mydb
     if(not mydb.is_connected()):
         print("Verbindung zur DB verloren...wird reconnected")
         mydb.reconnect(attempts=3, delay=5)
-        mydb = zz_init.getdb()
+        mydb = zz_init.mydb
     mycursor = mydb.cursor()
     if(value):
         mycursor.execute(sqlcommand, value)
@@ -540,11 +535,11 @@ async def dbcommit(sqlcommand, value = None, nofetch = 0):
         return mycursor.fetchall()
 
 async def dbcommitfone(sqlcommand, value = None):
-    mydb = zz_init.getdb()
+    mydb = zz_init.mydb
     if(not mydb.is_connected()):
         print("Verbindung zur DB verloren...wird reconnected")
         mydb.reconnect(attempts=3, delay=5)
-        mydb = zz_init.getdb()
+        mydb = zz_init.mydb
     mycursor = mydb.cursor()
     if(value):
         mycursor.execute(sqlcommand, value)
