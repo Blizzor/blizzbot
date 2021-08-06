@@ -18,6 +18,56 @@ mydb = mysql.connector.connect(
     auth_plugin='mysql_native_password'
 )
 
+welcome_messages = []
+with open("welcome/discord/welcome.txt", "r") as file:
+    for line in file:
+        welcome_messages.append(line)
+welcome_messages_count = len(welcome_messages)
+
+whitelist_youtube_paths = []
+with open("whitelist/youtube/paths.txt", "r") as file:
+    for line in file:
+        whitelist_youtube_paths.append(line)
+
+whitelist_twitch_paths = []
+with open("whitelist/twitch/paths.txt", "r") as file:
+    for line in file:
+        whitelist_twitch_paths.append(line)
+
+whitelist_pterodactyl_youtube_paths = []
+with open("whitelist/youtube/pterodactyl.txt", "r") as file:
+    for line in file:
+        whitelist_pterodactyl_youtube_paths.append(line)
+
+whitelist_pterodactyl_twitch_paths = []
+with open("whitelist/twitch/pterodactyl.txt", "r") as file:
+    for line in file:
+        whitelist_pterodactyl_twitch_paths.append(line)
+
+badwords = []
+badwords_filename = "blacklist/discord/badwords.txt"
+with open(badwords_filename", "r") as file:
+    for line in file:
+        badwords.append(line)
+
+def addBadword(word):
+    badwords.append(word+"\n")
+
+    with open(badwords_filename, "a") as file:
+        file.write(word+"\n")
+
+def removeBadword(word):
+    word_safe = word.strip() + "\n"
+
+    if word_safe not in badwords:
+        return
+
+    badwords.remove(word_safe)
+
+    with open(badwords_filename, "w") as file:
+        for badword in badwords:
+            file.write(badword)
+
 def logger():
     day = datetime.datetime.now()
 

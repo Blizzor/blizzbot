@@ -9,6 +9,8 @@ from os import path
 from shutil import copyfile
 from random import randrange
 
+import re
+
 async def cmndhelp(message):
     await message.channel.send("""```
 !mc [Name] - Registriere deinen Minecraft-Account
@@ -95,19 +97,10 @@ async def cmndnotify(message, guild):
     return
 
 async def gotverified(author, channel, bot):
-    words = open("welcome/discord/welcome.txt", "r")
-    Lwords = []
-    count = 0
-    for line in words:
-        Lwords.append(line)
-        count += 1
-    number = randrange(0,count)
-    count = 0
-    text = Lwords[number].removesuffix("\n")
-    text = text.replace("Name","**" + author.name + "**")
+    number = randrange(0,zz_init.welcome_messages_count)
+    text = zz_init.welcome_messages[number].removesuffix("\n")
+    text = text.format(memberName=author.name)
     await channel.send(text)
-
-    words.close()
     return
 
 async def cmndmcname(message, name=None):
@@ -238,9 +231,10 @@ async def cmndranking(message):
     text="```\n"
     for p in myresult:
         if count <= 10:
-            embed = discord.Embed(title=message.guild.get_member(p[1]).name, color=0xedbc5d + color)
-            embed.set_thumbnail(url=message.guild.get_member(p[1]).avatar_url)
-            text += message.guild.get_member(p[1]).name + "\n"
+            user = message.guild.get_member(p[1])
+            embed = discord.Embed(title=user.name, color=0xedbc5d + color)
+            embed.set_thumbnail(url=user.avatar_url)
+            text += user.name + "\n"
             embed.add_field(name="Rang", value=str(count), inline=True)
             embed.add_field(name="Exp", value=str(p[0]), inline=True)
             color += 10
@@ -394,7 +388,6 @@ async def syncwhitelist():
                 'uuid': x[1],
                 'name': x[0]
                 })
-    for x in results:
         if x[3]:
             whitelisttwitch.append({
                 'uuid': x[1],
@@ -403,11 +396,9 @@ async def syncwhitelist():
 
     with open('whitelist/youtube/whitelist.json', 'w') as outfile:
         json.dump(whitelistyoutube, outfile, indent=2)
-    outfile.close()
 
     with open('whitelist/twitch/whitelist.json', 'w') as outfile:
         json.dump(whitelisttwitch, outfile, indent=2)
-    outfile.close()
 
     await syncwhitelistfiles()
     await syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch)
@@ -416,37 +407,29 @@ async def syncwhitelist():
 
 async def syncwhitelistfiles():
     #Kopiere Whitelist in verschiedene Ordner
-    paths = open("whitelist/youtube/paths.txt", "r")
-    for line in paths:
+    for line in zz_init.whitelist_youtube_paths:
         copyfile('whitelist/youtube/whitelist.json', str(line.rstrip()) + 'whitelist.json')
-    paths.close()
 
     #Kopiere Whitelist in verschiedene Ordner
-    paths = open("whitelist/twitch/paths.txt", "r")
-    for line in paths:
+    for line in zz_init.whitelist_twitch_paths:
         copyfile('whitelist/twitch/whitelist.json', str(line.rstrip()) + 'whitelist.json')
-    paths.close()
 
     return
 
 async def syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch):
-    paths = open("whitelist/youtube/pterodactyl.txt", "r")
-    for line in paths:
+    for line in zz_init.whitelist_pterodactyl_youtube_paths:
         parts = line.split(" ")
         serverid = parts[0]
         whitelistpath = parts[1]
 
         await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelistyoutube), zz_init.config['pterodactyl_apikey'])
-    paths.close()
 
-    paths = open("whitelist/twitch/pterodactyl.txt", "r")
-    for line in paths:
+    for line in zz_init.whitelist_pterodactyl_twitch_paths:
         parts = line.split(" ")
         serverid = parts[0]
         whitelistpath = parts[1]
 
         await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelisttwitch), zz_init.config['pterodactyl_apikey'])
-    paths.close()
 
 async def pterodactylwritefile(serverid, path, data, apikey):
     url = zz_init.config['pterodactyl_domain'] + 'api/client/servers/' + serverid + '/files/write?file='\
@@ -456,11 +439,8 @@ async def pterodactylwritefile(serverid, path, data, apikey):
 async def getmemberid(message, name):
     guild = message.author.guild
     ID = 0
-    for member in guild.members:
-
-    #for member in get_all_members():
-        if member.name == name:
-            ID = member.id
+    if (member := guild.get_member_named(name)) != None:
+        ID = member.id
     return ID
 
 async def checkrole(roles, roleid):
@@ -470,50 +450,23 @@ async def checkrole(roles, roleid):
     return False
 
 async def checkwords(message):
-
-    words = open("blacklist/discord/badwords.txt", "r")
-    for line in words:
-        if str(line.strip()).lower() in message.content.strip().lower():
+    for line in zz_init.badwords:
+        if re.match('.*' + re.sub('( *|\n*)', '' , line) + '.*', re.sub('( *|\n*)', '', message.content), re.I):
             return True
-    words.close()
 
     return False
 
 async def addblacklistword(message, arg):
-
-    words = open("blacklist/discord/badwords.txt", "a")
-
-    words.write(arg.strip() + "\n")
-
-    words.close()
-
+    zz_init.addBadword(arg.strip())
     return False
 
 async def removeblacklistword(message, arg):
-
-    newfile = ""
-    words = open("blacklist/discord/badwords.txt", "r")
-    for line in words:
-        if line != arg.strip()+"\n":
-            newfile += line
-    words.close()
-
-    words = open("blacklist/discord/badwords.txt", "w")
-    words.write(newfile)
-
-    words.close()
-
+    zz_init.removeBadword(arg.strip())
 
     return False
 
 async def blacklist():
-
-    file =(open("blacklist/discord/badwords.txt", "r"))
-    content = ""
-    for line in file:
-        content += line
-
-    return content
+    return ''.join(zz_init.badwords)
 
 
 #async def is_verified(ctx):

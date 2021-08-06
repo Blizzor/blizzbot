@@ -10,6 +10,8 @@ from random import randrange
 from discord.ext import commands
 from discord.utils import get
 
+import re
+
 intents = discord.Intents()
 intents.messages = True
 intents.reactions = True
@@ -61,7 +63,9 @@ async def anfrage(ctx):
 async def on_message(message):
     await bot.process_commands(message)
     filter = True
-    if "http" in message.content and message.guild:
+
+    messageNoWhitespace = re.sub(' *', '', message.content)
+    if re.fullmatch(r".*https?:.*\.[a-zA-Z]{2,3}.*", messageNoWhitespace, re.I) and message.guild:
         if await zz_functions.checkrole(message.author.roles, zz_init.config['IDgrpverificate']):
             for i in zz_init.config['ArraynoFilter']:
                 if await zz_functions.checkrole(message.author.roles, i):
