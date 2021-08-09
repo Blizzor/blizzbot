@@ -2,6 +2,56 @@ import json
 import datetime
 import logging
 import mysql.connector
+import re
+
+class Config():
+    def __init__(self, static_files, dynamic_files):
+        for file in static_files:
+            self.readFile(file)
+
+        for file in dynamic_files:
+            fileWithoutEnd, ending = (''.join(splitted[:-1]), splitted[-1]) if len( (splitted := file.split('.')) ) > 1 else (splitted[0], '')
+
+            self.readFile(file, fileWithoutEnd, ending)
+
+            self.__setattr__(fileWithoutEnd + "_add", (lambda line : self.appendLine(file, fileWithoutEnd, line)))
+            self.__setattr__(fileWithoutEnd + "_remove", (lambda line : self.removeLine(file, fileWithoutEnd, line)))
+
+    def appendLine(self, filename, fileWithoutEnd, line):
+        self.__getattribute__(fileWithoutEnd).append(line)
+
+        self.appendLine_(filename, line)
+
+    def appendLine_(self, filename, line):
+        with open(filename, 'a') as open_file:
+            open_file.write(line)
+
+    def removeLine(self, filename, fileWithoutEnd, line):
+        try:
+            self.__getattribute__(fileWithoutEnd).remove(line)
+
+        except:
+            pass
+
+        self.removeLine_(filename, fileWithoutEnd)
+
+    def removeLine_(filename, fileWithoutEnd):
+        with open(filename, 'w') as open_file:
+            for line in self.__getattribute__(fileWithoutEnd):
+                open_file.write(line)
+
+    def readFile(self, filename, fileWithoutEnd=None, ending=None):
+        if fileWithoutEnd == None or ending == None:
+            fileWithoutEnd, ending = (''.join(splitted[:-1]), splitted[-1]) if len( (splitted := filename.split('.')) ) > 1 else (splitted[0], '')
+
+        with open(filename, 'r') as open_file:
+            if ending == "json":
+                try:
+                    self.__setattr__(fileWithoutEnd, json.load(open_file))
+                except:
+                    continue
+            else:
+                self.__setattr__(fileWithoutEnd, open_file.readlines())
 
 config = {}
 
