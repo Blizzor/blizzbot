@@ -19,17 +19,17 @@ class Config():
             self.__setattr__(attrName + "_remove", (lambda line : self.removeLine(file, attrName, line)))
 
     def appendLine(self, filename, attrName, line):
-        self.__getattribute__(attrName).append(line)
+        self.__getattribute__(attrName).append(self.removeNewline(line))
 
         self.appendLine_(filename, line)
 
     def appendLine_(self, filename, line):
         with open(filename, 'a') as open_file:
-            open_file.write(line)
+            open_file.write(line+'\n' if len(line) > 0 and line[-1] != '\n' else line)
 
     def removeLine(self, filename, attrName, line):
         try:
-            self.__getattribute__(attrName).remove(line)
+            self.__getattribute__(attrName).remove(self.removeNewline(line))
 
         except:
             pass
@@ -39,7 +39,7 @@ class Config():
     def removeLine_(self, filename, attrName):
         with open(filename, 'w') as open_file:
             for line in self.__getattribute__(attrName):
-                open_file.write(line)
+                open_file.write(line+'\n' if len(line) > 0 and line[-1] != '\n' else line)
 
     def readFile(self, filename, attrName=None, ending=None):
         if attrName == None or ending == None:
@@ -53,7 +53,10 @@ class Config():
                 except:
                     return
             else:
-                self.__setattr__(attrName, open_file.readlines())
+                    self.__setattr__(attrName, [ self.removeNewline(line) for line in open_file ])
+
+    def removeNewline(self, text):
+        return text[:-1] if len(text) > 0 and text[-1] == "\n" else text
 
 config = {}
 
