@@ -36,7 +36,7 @@ class Config():
 
         self.removeLine_(filename, attrName)
 
-    def removeLine_(filename, attrName):
+    def removeLine_(self, filename, attrName):
         with open(filename, 'w') as open_file:
             for line in self.__getattribute__(attrName):
                 open_file.write(line)
@@ -51,7 +51,7 @@ class Config():
                 try:
                     self.__setattr__(attrName, json.load(open_file))
                 except:
-                    continue
+                    return
             else:
                 self.__setattr__(attrName, open_file.readlines())
 
@@ -98,7 +98,7 @@ with open("whitelist/twitch/pterodactyl.txt", "r") as file:
 
 badwords = []
 badwords_filename = "blacklist/discord/badwords.txt"
-with open(badwords_filename", "r") as file:
+with open(badwords_filename, "r") as file:
     for line in file:
         badwords.append(line)
 
