@@ -10,15 +10,16 @@ class Config():
             self.readFile(file)
 
         for file in dynamic_files:
-            fileWithoutEnd, ending = (''.join(splitted[:-1]), splitted[-1]) if len( (splitted := file.split('.')) ) > 1 else (splitted[0], '')
+            attrName, ending = (''.join(splitted[:-1]), splitted[-1]) if len( (splitted := file.split('.')) ) > 1 else (splitted[0], '')
+            attrName = re.sub('//*', '_', attrName)
 
-            self.readFile(file, fileWithoutEnd, ending)
+            self.readFile(file, attrName, ending)
 
-            self.__setattr__(fileWithoutEnd + "_add", (lambda line : self.appendLine(file, fileWithoutEnd, line)))
-            self.__setattr__(fileWithoutEnd + "_remove", (lambda line : self.removeLine(file, fileWithoutEnd, line)))
+            self.__setattr__(attrName + "_add", (lambda line : self.appendLine(file, attrName, line)))
+            self.__setattr__(attrName + "_remove", (lambda line : self.removeLine(file, attrName, line)))
 
-    def appendLine(self, filename, fileWithoutEnd, line):
-        self.__getattribute__(fileWithoutEnd).append(line)
+    def appendLine(self, filename, attrName, line):
+        self.__getattribute__(attrName).append(line)
 
         self.appendLine_(filename, line)
 
@@ -26,32 +27,33 @@ class Config():
         with open(filename, 'a') as open_file:
             open_file.write(line)
 
-    def removeLine(self, filename, fileWithoutEnd, line):
+    def removeLine(self, filename, attrName, line):
         try:
-            self.__getattribute__(fileWithoutEnd).remove(line)
+            self.__getattribute__(attrName).remove(line)
 
         except:
             pass
 
-        self.removeLine_(filename, fileWithoutEnd)
+        self.removeLine_(filename, attrName)
 
-    def removeLine_(filename, fileWithoutEnd):
+    def removeLine_(filename, attrName):
         with open(filename, 'w') as open_file:
-            for line in self.__getattribute__(fileWithoutEnd):
+            for line in self.__getattribute__(attrName):
                 open_file.write(line)
 
-    def readFile(self, filename, fileWithoutEnd=None, ending=None):
-        if fileWithoutEnd == None or ending == None:
-            fileWithoutEnd, ending = (''.join(splitted[:-1]), splitted[-1]) if len( (splitted := filename.split('.')) ) > 1 else (splitted[0], '')
+    def readFile(self, filename, attrName=None, ending=None):
+        if attrName == None or ending == None:
+            attrName, ending = (''.join(splitted[:-1]), splitted[-1]) if len( (splitted := filename.split('.')) ) > 1 else (splitted[0], '')
+            attrName = re.sub('//*', '_', attrName)
 
         with open(filename, 'r') as open_file:
             if ending == "json":
                 try:
-                    self.__setattr__(fileWithoutEnd, json.load(open_file))
+                    self.__setattr__(attrName, json.load(open_file))
                 except:
                     continue
             else:
-                self.__setattr__(fileWithoutEnd, open_file.readlines())
+                self.__setattr__(attrName, open_file.readlines())
 
 config = {}
 
