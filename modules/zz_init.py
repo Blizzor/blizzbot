@@ -6,20 +6,19 @@ import re
 
 class Config():
     def __init__(self, static_files, dynamic_files):
-        for file in static_files:
-            self.readFile(file)
+        for filename, alias in static_files:
+            self.readFile(filename, alias)
 
-        for file in dynamic_files:
-            attrName, ending = (''.join(splitted[:-1]), splitted[-1]) if len( (splitted := file.split('.')) ) > 1 else (splitted[0], '')
-            attrName = re.sub('//*', '_', attrName)
+        for filename, alias in dynamic_files:
+            ending = splitted[-1] if len( (splitted := filename.split('.')) ) > 1 else ''
 
-            self.readFile(file, attrName, ending)
+            self.readFile(filename, alias, ending)
 
-            self.__setattr__(attrName + "_add", (lambda line : self.appendLine(file, attrName, line)))
-            self.__setattr__(attrName + "_remove", (lambda line : self.removeLine(file, attrName, line)))
+            self.__setattr__(alias + "_add", (lambda line : self.appendLine(filename, alias, line)))
+            self.__setattr__(alias + "_remove", (lambda line : self.removeLine(filename, alias, line)))
 
-    def appendLine(self, filename, attrName, line):
-        self.__getattribute__(attrName).append(self.removeNewline(line))
+    def appendLine(self, filename, alias, line):
+        self.__getattribute__(alias).append(self.removeNewline(line))
 
         self.appendLine_(filename, line)
 
@@ -27,33 +26,32 @@ class Config():
         with open(filename, 'a') as open_file:
             open_file.write(line+'\n' if len(line) > 0 and line[-1] != '\n' else line)
 
-    def removeLine(self, filename, attrName, line):
+    def removeLine(self, filename, alias, line):
         try:
-            self.__getattribute__(attrName).remove(self.removeNewline(line))
+            self.__getattribute__(alias).remove(self.removeNewline(line))
 
         except:
             pass
 
-        self.removeLine_(filename, attrName)
+        self.removeLine_(filename, alias)
 
-    def removeLine_(self, filename, attrName):
+    def removeLine_(self, filename, alias):
         with open(filename, 'w') as open_file:
-            for line in self.__getattribute__(attrName):
+            for line in self.__getattribute__(alias):
                 open_file.write(line+'\n' if len(line) > 0 and line[-1] != '\n' else line)
 
-    def readFile(self, filename, attrName=None, ending=None):
-        if attrName == None or ending == None:
-            attrName, ending = (''.join(splitted[:-1]), splitted[-1]) if len( (splitted := filename.split('.')) ) > 1 else (splitted[0], '')
-            attrName = re.sub('//*', '_', attrName)
+    def readFile(self, filename, alias, ending=None):
+        if ending == None:
+            ending = splitted[-1] if len( (splitted := filename.split('.')) ) > 1 else ''
 
         with open(filename, 'r') as open_file:
             if ending == "json":
                 try:
-                    self.__setattr__(attrName, json.load(open_file))
+                    self.__setattr__(alias, json.load(open_file))
                 except:
                     return
             else:
-                    self.__setattr__(attrName, [ self.removeNewline(line) for line in open_file ])
+                    self.__setattr__(alias, [ self.removeNewline(line) for line in open_file ])
 
     def removeNewline(self, text):
         return text[:-1] if len(text) > 0 and text[-1] == "\n" else text
