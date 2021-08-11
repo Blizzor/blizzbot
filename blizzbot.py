@@ -38,7 +38,7 @@ async def on_ready():
 
 @bot.command(aliases=["minecraft"])
 async def mc(ctx, arg=None):
-    if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
+    if ctx.message.channel.id == zz_init.config.main['IDchannelcommand']:
         if arg:
             await zz_functions.cmndmc(ctx.message, bot, arg)
         else:
@@ -46,12 +46,12 @@ async def mc(ctx, arg=None):
 
 @bot.command(aliases=["checkdatabase"])
 async def checkdb(ctx):
-    if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
+    if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
         await zz_functions.cmndcheckdb(ctx.message,bot)
 
 @bot.command()
 async def anfrage(ctx):
-    if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
+    if ctx.message.channel.id == zz_init.config.main['IDchannelcommand']:
         Nachricht = await zz_functions.question(ctx.message,bot)
 
         channels = (ctx.author.guild.text_channels)
@@ -66,23 +66,23 @@ async def on_message(message):
 
     messageNoWhitespace = re.sub(' *', '', message.content)
     if re.fullmatch(r".*https?:.*\.[a-zA-Z]{2,3}.*", messageNoWhitespace, re.I) and message.guild:
-        if await zz_functions.checkrole(message.author.roles, zz_init.config['IDgrpverificate']):
-            for i in zz_init.config['ArraynoFilter']:
+        if await zz_functions.checkrole(message.author.roles, zz_init.config.main['IDgrpverificate']):
+            for i in zz_init.config.main['ArraynoFilter']:
                 if await zz_functions.checkrole(message.author.roles, i):
                     filter = False
             if filter:
                 await message.delete()
 
-    if message.guild and message.author != bot.user and message.channel.id != zz_init.config['IDchanneladmin']:
+    if message.guild and message.author != bot.user and message.channel.id != zz_init.config.main['IDchanneladmin']:
         if await zz_functions.checkwords(message):
             await message.delete()
             await message.author.create_dm()
             await message.author.dm_channel.send("Ihre Nachricht mit dem Inhalt **" + message.content + "** wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
 
-    if message.channel.id == zz_init.config['IDchannelverificate'] and message.content != "!zz":
+    if message.channel.id == zz_init.config.main['IDchannelverificate'] and message.content != "!zz":
         await message.delete()
 
-    if message.author != bot.user and message.guild and message.channel.id != zz_init.config['IDchannelcommand'] and message.channel.category_id != zz_init.config['IDcategorytext']:
+    if message.author != bot.user and message.guild and message.channel.id != zz_init.config.main['IDchannelcommand'] and message.channel.category_id != zz_init.config.main['IDcategorytext']:
         await zz_functions.getexp(message)
         number = randrange(0,1000)
         if(number == 5):
@@ -102,21 +102,21 @@ async def on_message(message):
 @bot.event
 async def on_raw_reaction_add(payload):
 
-    if payload.channel_id == zz_init.config['IDchannelverificate']:
+    if payload.channel_id == zz_init.config.main['IDchannelverificate']:
         if payload.emoji.id == 704707230137581658: #testserverid: 596435950469513216  #serverid: 704707230137581658
             for i in bot.guilds[0].roles:
-                if i.id == zz_init.config['IDgrpverificate'] or i.id == zz_init.config['IDgrpnotify']:
-                    if i.id == zz_init.config['IDgrpverificate']:
+                if i.id == zz_init.config.main['IDgrpverificate'] or i.id == zz_init.config.main['IDgrpnotify']:
+                    if i.id == zz_init.config.main['IDgrpverificate']:
                         await payload.member.add_roles(i)
-                        await zz_functions.gotverified(payload.member, bot.get_channel(zz_init.config['IDchannelstandard']), bot)
+                        await zz_functions.gotverified(payload.member, bot.get_channel(zz_init.config.main['IDchannelstandard']), bot)
                     else:
                         await payload.member.add_roles(i)
 
     if(payload.member != bot.user):
-        if payload.channel_id == zz_init.config['IDchannelcommand']:
+        if payload.channel_id == zz_init.config.main['IDchannelcommand']:
             if payload.emoji.id == 780172418781675531: # Links
                 await zz_functions.switchrank(payload, bot)
-        if payload.channel_id == zz_init.config['IDchannelcommand']:
+        if payload.channel_id == zz_init.config.main['IDchannelcommand']:
             if payload.emoji.id == 780171887619473458: # Rechts
                 await zz_functions.switchrank(payload, bot)
 
@@ -163,10 +163,10 @@ async def on_member_update(before,after):
 
         wlroleyoutube = False
         wlroletwitch = False
-        for i in zz_init.config['ArrayIDgrpsubyoutube']:
+        for i in zz_init.config.main['ArrayIDgrpsubyoutube']:
             if await zz_functions.checkrole(after.roles, i):
                 wlroleyoutube = True
-        for i in zz_init.config['ArrayIDgrpsubtwitch']:
+        for i in zz_init.config.main['ArrayIDgrpsubtwitch']:
             if await zz_functions.checkrole(after.roles, i):
                 wlroletwitch = True
         sql = "UPDATE mcnames SET isWhitelistedYoutube = %s WHERE discord_id = %s"
@@ -192,7 +192,7 @@ async def on_voice_state_update(member, before, after):
     if(before.channel != after.channel): #Wenn Änderung durch Channelwechsel stattfindet
         tcategory = None
         for n in member.guild.categories:
-            if n.id == zz_init.config['IDcategorytext']:
+            if n.id == zz_init.config.main['IDcategorytext']:
                 tcategory = n
 
         channels = (member.guild.voice_channels)
@@ -206,7 +206,7 @@ async def on_voice_state_update(member, before, after):
         emptychannels = False
         cpchannel = channels[0]
         for j in channels:
-            if j.category.id == zz_init.config['IDcategoryvoice']: # Wenn Kategory richtig ist
+            if j.category.id == zz_init.config.main['IDcategoryvoice']: # Wenn Kategory richtig ist
                 if not j.members: # Wenn niemand im Channel ist
                     if not emptychannels: # Wenn emptychannel False ist
                         emptychannels = True
@@ -222,22 +222,22 @@ async def on_voice_state_update(member, before, after):
         if(before.channel != None): # Wenn Benutzer Channel verlässt
             #Entferne Nutzer aus Role
             for k in channels: # Prüfe Sprachchannel
-                if k.category.id == zz_init.config['IDcategoryvoice'] and k.id == before.channel.id: # Wenn Kategory richtig ist
+                if k.category.id == zz_init.config.main['IDcategoryvoice'] and k.id == before.channel.id: # Wenn Kategory richtig ist
                     if not k.members: # Wenn niemand im Channel ist
                         #Entferne Berechtigung
                         for l in tchannels:
-                            if(l.topic != None and l.category.id == zz_init.config['IDcategorytext']):
+                            if(l.topic != None and l.category.id == zz_init.config.main['IDcategorytext']):
                                 if str(k.id) == l.topic:
                                     await l.delete() # Entferne Textchannel
                     else:
                         #Entferne Channel
                         for l3 in tchannels:
-                            if(l3.topic != None and l3.category.id == zz_init.config['IDcategorytext']):
+                            if(l3.topic != None and l3.category.id == zz_init.config.main['IDcategorytext']):
                                 if str(k.id) == l3.topic:
                                     await l3.set_permissions(member, read_messages=None)
 
 
-        if(after.channel != None and after.channel.category_id == zz_init.config['IDcategoryvoice'] and after.channel.name != "Stream-Channel"): # Wenn Channel betreten wird
+        if(after.channel != None and after.channel.category_id == zz_init.config.main['IDcategoryvoice'] and after.channel.name != "Stream-Channel"): # Wenn Channel betreten wird
 
             channelexists = False
             for m in tchannels:
@@ -246,12 +246,12 @@ async def on_voice_state_update(member, before, after):
             if(not channelexists): # Wenn der Textchannel nicht existiert
                 overwrites = {
                 member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
-                member.guild.get_role(zz_init.config['IDgrpMod']): discord.PermissionOverwrite(read_messages=True)
+                member.guild.get_role(zz_init.config.main['IDgrpMod']): discord.PermissionOverwrite(read_messages=True)
                 }
                 await member.guild.create_text_channel('Channel', overwrites=overwrites, category = tcategory, topic = after.channel.id)
             tchannels = (member.guild.text_channels)
             for l2 in tchannels:
-                if(l2.topic != None and l2.category.id == zz_init.config['IDcategorytext']):
+                if(l2.topic != None and l2.category.id == zz_init.config.main['IDcategorytext']):
                     if str(after.channel.id) == l2.topic:
                         await l2.set_permissions(member, read_messages=True)
 
@@ -261,7 +261,7 @@ async def on_voice_state_update(member, before, after):
 async def on_message_delete(message):
     if(message):
 
-        channel = discord.utils.get(message.guild.text_channels, id=zz_init.config['IDchannellogs'])
+        channel = discord.utils.get(message.guild.text_channels, id=zz_init.config.main['IDchannellogs'])
 
         embed = discord.Embed(title="Gelöschte Nachricht", color=0xedbc5d)
         if(message.author.avatar_url):

@@ -1,40 +1,36 @@
 {
-    "discord": [
-        {
-            "token": "Discord_Bot_Token",
-            "IDcategoryvoice": 123,
-            "IDcategorytext": 123,
-            "IDchannelcommand": 123,
-            "IDchannelstandard": 123,
-            "IDchanneladmin": 123,
-            "IDchannellogs": 123,
-            "IDgrpverificate": 123,
-            "IDgrpnotify": 123,
-            "IDgrpMod": 123,
-            "IDgrpYT": 123,
-            "IDgrpYTGold": 123,
-            "IDgrpYTDiamant": 123,
-            "ArrayIDgrpsubyoutube": [
-                123,
-                456,
-                789
-            ],
-            "ArrayIDgrpsubtwitch": [
-                123,
-                456,
-                789
-            ],
-            "ArraynoFilter": [
-                123,
-                456,
-                789
-            ],
-            "DBhost": "localhost",
-            "DBuser": "MySQL Database User",
-            "DBpasswd": "MySQL Database Password",
-            "DBdatabase": "MySQL Database Name",
-            "pterodactyl_domain": "Domain to Pterodactyl Panel",
-            "pterodactyl_apikey": "API Key for Pterodactyl Panel"
-        }
-    ]
+    "token": "Discord_Bot_Token",
+    "IDcategoryvoice": 123,
+    "IDcategorytext": 123,
+    "IDchannelcommand": 123,
+    "IDchannelstandard": 123,
+    "IDchanneladmin": 123,
+    "IDchannellogs": 123,
+    "IDgrpverificate": 123,
+    "IDgrpnotify": 123,
+    "IDgrpMod": 123,
+    "IDgrpYT": 123,
+    "IDgrpYTGold": 123,
+    "IDgrpYTDiamant": 123,
+    "ArrayIDgrpsubyoutube": [
+        123,
+        456,
+        789
+    ],
+    "ArrayIDgrpsubtwitch": [
+        123,
+        456,
+        789
+    ],
+    "ArraynoFilter": [
+        123,
+        456,
+        789
+    ],
+    "DBhost": "localhost",
+    "DBuser": "MySQL Database User",
+    "DBpasswd": "MySQL Database Password",
+    "DBdatabase": "MySQL Database Name",
+    "pterodactyl_domain": "Domain to Pterodactyl Panel",
+    "pterodactyl_apikey": "API Key for Pterodactyl Panel"
 }

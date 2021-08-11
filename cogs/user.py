@@ -10,19 +10,19 @@ class MembersCog(commands.Cog):
     @commands.command(aliases=["hilfe"])
     @commands.guild_only()
     async def help(self, ctx):
-        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
+        if ctx.message.channel.id == zz_init.config.main['IDchannelcommand']:
             await zz_functions.cmndhelp(ctx.message)
 
     @commands.command()
     @commands.guild_only()
     async def notify(self, ctx):
-        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
+        if ctx.message.channel.id == zz_init.config.main['IDchannelcommand']:
             await zz_functions.cmndnotify(ctx.message, ctx.guild)
 
     @commands.command(aliases=["minecraftname"])
     @commands.guild_only()
     async def mcname(self, ctx, arg=None):
-        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
+        if ctx.message.channel.id == zz_init.config.main['IDchannelcommand']:
             if arg:
                 await zz_functions.cmndmcname(ctx.message, arg)
             else:
@@ -31,7 +31,7 @@ class MembersCog(commands.Cog):
     @commands.command(aliases=["rang"])
     @commands.guild_only()
     async def rank(self, ctx, arg=None):
-        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
+        if ctx.message.channel.id == zz_init.config.main['IDchannelcommand']:
             if arg:
                 await zz_functions.cmndrank(ctx.message, arg)
             else:
@@ -40,29 +40,29 @@ class MembersCog(commands.Cog):
     @commands.command(aliases=["rangliste"])
     @commands.guild_only()
     async def ranking(self, ctx):
-        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
+        if ctx.message.channel.id == zz_init.config.main['IDchannelcommand']:
             await zz_functions.cmndranking(ctx.message)
 
     @commands.command()
     @commands.guild_only()
     async def streamchannel(self, ctx):
-        if ctx.message.channel.id == zz_init.config['IDchannelcommand']:
+        if ctx.message.channel.id == zz_init.config.main['IDchannelcommand']:
             await zz_functions.cmndstreamchannel(ctx.message)
 
     @commands.command()
     @commands.guild_only()
     async def zz(self, ctx):
-        if ctx.message.channel.id == zz_init.config['IDchannelverificate']:
-            member = discord.utils.find(lambda m: m.id == zz_init.config['IDgrpverificate'], ctx.author.roles)
+        if ctx.message.channel.id == zz_init.config.main['IDchannelverificate']:
+            member = discord.utils.find(lambda m: m.id == zz_init.config.main['IDgrpverificate'], ctx.author.roles)
             await ctx.message.delete()
             await ctx.author.create_dm()
             if not member:
-                grpverify = ctx.guild.get_role(zz_init.config['IDgrpverificate'])
+                grpverify = ctx.guild.get_role(zz_init.config.main['IDgrpverificate'])
                 await ctx.author.add_roles(grpverify)
                 await ctx.author.dm_channel.send("Du wurdest erfolgreich freigeschalten!")
-                grpnotify = ctx.guild.get_role(zz_init.config['IDgrpnotify'])
+                grpnotify = ctx.guild.get_role(zz_init.config.main['IDgrpnotify'])
                 await ctx.author.add_roles(grpnotify)
-                await zz_functions.gotverified(ctx.author, self.bot.get_channel(zz_init.config['IDchannelstandard']), self.bot)
+                await zz_functions.gotverified(ctx.author, self.bot.get_channel(zz_init.config.main['IDchannelstandard']), self.bot)
             else:
                 await ctx.author.dm_channel.send("Du bist bereits freigeschalten!")
 

@@ -56,70 +56,29 @@ class Config():
     def removeNewline(self, text):
         return text[:-1] if len(text) > 0 and text[-1] == "\n" else text
 
-config = {}
-
-with open('config/config.json') as json_file:
-    jsonstructure = json.load(json_file)
-    for p in jsonstructure['discord']:
-        config = p
-
-mydb = mysql.connector.connect(
-    host=DBhost,
-    user=DBuser,
-    passwd=DBpasswd,
-    database=DBdatabase,
-    auth_plugin='mysql_native_password'
+config = Config(
+    [
+        ('config/config.json', 'main'),
+        ('welcome/discord/welcome.txt', 'welcome_messages'),
+        ('whitelist/youtube/paths.txt', 'wlytPaths'),
+        ('whitelist/twitch/paths.txt', 'wltPaths'),
+        ('whitelist/youtube/pterodactyl.txt', 'wlytPterodactyl'),
+        ('whitelist/twitch/pterodactyl.txt', 'wltPterodactyl')
+    ],
+    [
+        ('blacklist/discord/badwords.txt', 'badwords')
+    ]
 )
 
-welcome_messages = []
-with open("welcome/discord/welcome.txt", "r") as file:
-    for line in file:
-        welcome_messages.append(line)
-welcome_messages_count = len(welcome_messages)
+#mydb = mysql.connector.connect(
+#    host=config.main['DBhost'],
+#    user=config.main['DBuser'],
+#    passwd=config.main['DBpasswd'],
+#    database=config.main['DBdatabase'],
+#    auth_plugin='mysql_native_password'
+#)
 
-whitelist_youtube_paths = []
-with open("whitelist/youtube/paths.txt", "r") as file:
-    for line in file:
-        whitelist_youtube_paths.append(line)
-
-whitelist_twitch_paths = []
-with open("whitelist/twitch/paths.txt", "r") as file:
-    for line in file:
-        whitelist_twitch_paths.append(line)
-
-whitelist_pterodactyl_youtube_paths = []
-with open("whitelist/youtube/pterodactyl.txt", "r") as file:
-    for line in file:
-        whitelist_pterodactyl_youtube_paths.append(line)
-
-whitelist_pterodactyl_twitch_paths = []
-with open("whitelist/twitch/pterodactyl.txt", "r") as file:
-    for line in file:
-        whitelist_pterodactyl_twitch_paths.append(line)
-
-badwords = []
-badwords_filename = "blacklist/discord/badwords.txt"
-with open(badwords_filename, "r") as file:
-    for line in file:
-        badwords.append(line)
-
-def addBadword(word):
-    badwords.append(word+"\n")
-
-    with open(badwords_filename, "a") as file:
-        file.write(word+"\n")
-
-def removeBadword(word):
-    word_safe = word.strip() + "\n"
-
-    if word_safe not in badwords:
-        return
-
-    badwords.remove(word_safe)
-
-    with open(badwords_filename, "w") as file:
-        for badword in badwords:
-            file.write(badword)
+#welcome_messages_count = len(welcome_messages)
 
 def logger():
     day = datetime.datetime.now()

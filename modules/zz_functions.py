@@ -69,10 +69,10 @@ async def cmndmc(message, client, name=None):
             whitelistedyoutube = False
             whitelistedtwitch = True
             for role in message.author.roles:
-                for youtubeid in zz_init.config['ArrayIDgrpsubyoutube']:
+                for youtubeid in zz_init.config.main['ArrayIDgrpsubyoutube']:
                     if(role.id == youtubeid):
                         whitelistedyoutube = True
-                for twitchid in zz_init.config['ArrayIDgrpsubtwitch']:
+                for twitchid in zz_init.config.main['ArrayIDgrpsubtwitch']:
                     if(role.id == twitchid):
                         whitelistedtwitch = True
 
@@ -87,8 +87,8 @@ async def cmndmc(message, client, name=None):
     return
 
 async def cmndnotify(message, guild):
-    grpnotify = guild.get_role(zz_init.config['IDgrpnotify'])
-    if await checkrole(message.author.roles, zz_init.config['IDgrpnotify']):
+    grpnotify = guild.get_role(zz_init.config.main['IDgrpnotify'])
+    if await checkrole(message.author.roles, zz_init.config.main['IDgrpnotify']):
         await message.author.remove_roles(grpnotify)
         #NIMM GRUPPE WEG
     else:
@@ -97,8 +97,8 @@ async def cmndnotify(message, guild):
     return
 
 async def gotverified(author, channel, bot):
-    number = randrange(0,zz_init.welcome_messages_count)
-    text = zz_init.welcome_messages[number].removesuffix("\n")
+    number = randrange(0,len(zz_init.config.welcome_messages))
+    text = zz_init.config.welcome_messages[number].removesuffix("\n")
     text = text.format(memberName=author.name)
     await channel.send(text)
     return
@@ -303,7 +303,7 @@ async def cmndstreamchannel(message):
     emptychannels = False
     cpchannel = channels[0]
     for j in channels:
-        if j.category.id == zz_init.config['IDcategoryvoice']: # Wenn Kategory richtig ist
+        if j.category.id == zz_init.config.main['IDcategoryvoice']: # Wenn Kategory richtig ist
             cpchannel = j
     await cpchannel.clone(name="Stream-Channel")
     channels = (message.author.guild.voice_channels)
@@ -407,32 +407,32 @@ async def syncwhitelist():
 
 async def syncwhitelistfiles():
     #Kopiere Whitelist in verschiedene Ordner
-    for line in zz_init.whitelist_youtube_paths:
+    for line in zz_init.config.wlytPaths:
         copyfile('whitelist/youtube/whitelist.json', str(line.rstrip()) + 'whitelist.json')
 
     #Kopiere Whitelist in verschiedene Ordner
-    for line in zz_init.whitelist_twitch_paths:
+    for line in zz_init.config.wltPaths:
         copyfile('whitelist/twitch/whitelist.json', str(line.rstrip()) + 'whitelist.json')
 
     return
 
 async def syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch):
-    for line in zz_init.whitelist_pterodactyl_youtube_paths:
+    for line in zz_init.config.wlytPterodactyl:
         parts = line.split(" ")
         serverid = parts[0]
         whitelistpath = parts[1]
 
-        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelistyoutube), zz_init.config['pterodactyl_apikey'])
+        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelistyoutube), zz_init.config.main['pterodactyl_apikey'])
 
-    for line in zz_init.whitelist_pterodactyl_twitch_paths:
+    for line in zz_init.config.wltPterodactyl:
         parts = line.split(" ")
         serverid = parts[0]
         whitelistpath = parts[1]
 
-        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelisttwitch), zz_init.config['pterodactyl_apikey'])
+        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelisttwitch), zz_init.config.main['pterodactyl_apikey'])
 
 async def pterodactylwritefile(serverid, path, data, apikey):
-    url = zz_init.config['pterodactyl_domain'] + 'api/client/servers/' + serverid + '/files/write?file='\
+    url = zz_init.config.main['pterodactyl_domain'] + 'api/client/servers/' + serverid + '/files/write?file='\
           + urllib.parse.quote(path)
     requests.post(url, data=data, headers={"Accept": "application/json", "Authorization": "Bearer " + apikey})
 
@@ -450,23 +450,23 @@ async def checkrole(roles, roleid):
     return False
 
 async def checkwords(message):
-    for line in zz_init.badwords:
+    for line in zz_init.config.badwords:
         if re.match('.*' + re.sub('( *|\n*)', '' , line) + '.*', re.sub('( *|\n*)', '', message.content), re.I):
             return True
 
     return False
 
 async def addblacklistword(message, arg):
-    zz_init.addBadword(arg.strip())
+    zz_init.config.badwords_add(arg.strip())
     return False
 
 async def removeblacklistword(message, arg):
-    zz_init.removeBadword(arg.strip())
+    zz_init.config.badwords_remove(arg.strip())
 
     return False
 
 async def blacklist():
-    return ''.join(zz_init.badwords)
+    return ''.join(zz_init.config.badwords)
 
 
 #async def is_verified(ctx):

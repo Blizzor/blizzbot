@@ -10,7 +10,7 @@ class MembersCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def resetuser(self, ctx, arg=None):
-        if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
+        if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
             if arg:
                 await zz_functions.resetuser(ctx.message, arg)
 
@@ -19,7 +19,7 @@ class MembersCog(commands.Cog):
     async def customdbcommand(self, ctx, arg=None):
         text = ctx.message.content
         text = text.replace("!customdbcommand ", "")
-        if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
+        if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
             if arg:
                 #print(text)
                 await zz_functions.customdbcommand(ctx.message, text)
@@ -28,14 +28,14 @@ class MembersCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def resetrank(self, ctx, arg=None):
-        if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
+        if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
             if arg:
                 await zz_functions.resetrank(ctx.message, arg)
 
     @commands.command()
     @commands.guild_only()
     async def addblacklist(self, ctx, arg=None):
-        if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
+        if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
             if arg:
                 await zz_functions.addblacklistword(ctx.message, arg)
             else:
@@ -44,7 +44,7 @@ class MembersCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def removeblacklist(self, ctx, arg=None):
-        if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
+        if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
             if arg:
                 await zz_functions.removeblacklistword(ctx.message, arg)
             else:
@@ -53,32 +53,32 @@ class MembersCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def blacklist(self, ctx):
-        if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
+        if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
             await ctx.message.channel.send(await zz_functions.blacklist())
 
     @commands.command()
     @commands.guild_only()
     async def syncwhitelist(self, ctx):
-        if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
+        if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
             await zz_functions.syncwhitelist()
 
     @commands.command()
     @commands.guild_only()
     async def sd(self, ctx):
-        if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
+        if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
             await zz_functions.cmndshutdown(self.bot)
 
     @commands.command()
     @commands.guild_only()
     async def checkwhitelist(self, ctx):
-        if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
+        if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
             await zz_functions.cmndwhitelist(ctx.message)
 
     @commands.command()
     @commands.guild_only()
     async def say(self, ctx, arg=None):
-        if ctx.message.channel.id == zz_init.config['IDchanneladmin']:
-            channel = self.bot.get_channel(zz_init.config['IDchannelstandard'])
+        if ctx.message.channel.id == zz_init.config.main['IDchanneladmin']:
+            channel = self.bot.get_channel(zz_init.config.main['IDchannelstandard'])
             await channel.send(arg)
 #    @commands.command()
 #    @commands.guild_only()
