@@ -9,10 +9,7 @@ from os import path
 from shutil import copyfile
 from random import randrange
 
-IDgrpverificate = zz_init.config().get_IDgrpverificate()
-IDgrpnotify = zz_init.config().get_IDgrpnotify()
-ArrayIDgrpsubyoutube = zz_init.config().get_ArrayIDgrpsubyoutube()
-ArrayIDgrpsubtwitch = zz_init.config().get_ArrayIDgrpsubtwitch()
+import re
 
 async def cmndhelp(message):
     await message.channel.send("""```
@@ -44,7 +41,7 @@ async def question(message, client):
     return VolleNachricht
 
 async def cmndmc(message, client, name=None):
-    mydb = zz_init.getdb()
+    mydb = zz_init.mydb
     mycursor = mydb.cursor()
     if not name:
         await message.channel.send("Bitte Minecraftname eingeben")
@@ -72,10 +69,10 @@ async def cmndmc(message, client, name=None):
             whitelistedyoutube = False
             whitelistedtwitch = True
             for role in message.author.roles:
-                for youtubeid in ArrayIDgrpsubyoutube:
+                for youtubeid in zz_init.config.main['ArrayIDgrpsubyoutube']:
                     if(role.id == youtubeid):
                         whitelistedyoutube = True
-                for twitchid in ArrayIDgrpsubtwitch:
+                for twitchid in zz_init.config.main['ArrayIDgrpsubtwitch']:
                     if(role.id == twitchid):
                         whitelistedtwitch = True
 
@@ -90,8 +87,8 @@ async def cmndmc(message, client, name=None):
     return
 
 async def cmndnotify(message, guild):
-    grpnotify = guild.get_role(IDgrpnotify)
-    if await checkrole(message.author.roles, IDgrpnotify):
+    grpnotify = guild.get_role(zz_init.config.main['IDgrpnotify'])
+    if await checkrole(message.author.roles, zz_init.config.main['IDgrpnotify']):
         await message.author.remove_roles(grpnotify)
         #NIMM GRUPPE WEG
     else:
@@ -100,19 +97,10 @@ async def cmndnotify(message, guild):
     return
 
 async def gotverified(author, channel, bot):
-    words = open("welcome/discord/welcome.txt", "r")
-    Lwords = []
-    count = 0
-    for line in words:
-        Lwords.append(line)
-        count += 1
-    number = randrange(0,count)
-    count = 0
-    text = Lwords[number].removesuffix("\n")
-    text = text.replace("Name","**" + author.name + "**")
+    number = randrange(0,len(zz_init.config.welcome_messages))
+    text = zz_init.config.welcome_messages[number].removesuffix("\n")
+    text = text.format(memberName=author.name)
     await channel.send(text)
-
-    words.close()
     return
 
 async def cmndmcname(message, name=None):
@@ -243,9 +231,10 @@ async def cmndranking(message):
     text="```\n"
     for p in myresult:
         if count <= 10:
-            embed = discord.Embed(title=message.guild.get_member(p[1]).name, color=0xedbc5d + color)
-            embed.set_thumbnail(url=message.guild.get_member(p[1]).avatar_url)
-            text += message.guild.get_member(p[1]).name + "\n"
+            user = message.guild.get_member(p[1])
+            embed = discord.Embed(title=user.name, color=0xedbc5d + color)
+            embed.set_thumbnail(url=user.avatar_url)
+            text += user.name + "\n"
             embed.add_field(name="Rang", value=str(count), inline=True)
             embed.add_field(name="Exp", value=str(p[0]), inline=True)
             color += 10
@@ -314,7 +303,7 @@ async def cmndstreamchannel(message):
     emptychannels = False
     cpchannel = channels[0]
     for j in channels:
-        if j.category.id == zz_init.config().get_IDcategoryvoice(): # Wenn Kategory richtig ist
+        if j.category.id == zz_init.config.main['IDcategoryvoice']: # Wenn Kategory richtig ist
             cpchannel = j
     await cpchannel.clone(name="Stream-Channel")
     channels = (message.author.guild.voice_channels)
@@ -376,7 +365,7 @@ async def resetrank(message, name=None):
 async def resetuser(message, name=None):
 
     sql = "DELETE FROM mcnames WHERE discord_id = " + str(name)
-    await dbcommit(sql)  
+    await dbcommit(sql)
 
     sql = "DELETE FROM ranking WHERE discord_id = " + str(name)
     await dbcommit(sql)
@@ -399,7 +388,6 @@ async def syncwhitelist():
                 'uuid': x[1],
                 'name': x[0]
                 })
-    for x in results:
         if x[3]:
             whitelisttwitch.append({
                 'uuid': x[1],
@@ -408,11 +396,9 @@ async def syncwhitelist():
 
     with open('whitelist/youtube/whitelist.json', 'w') as outfile:
         json.dump(whitelistyoutube, outfile, indent=2)
-    outfile.close()
 
     with open('whitelist/twitch/whitelist.json', 'w') as outfile:
         json.dump(whitelisttwitch, outfile, indent=2)
-    outfile.close()
 
     await syncwhitelistfiles()
     await syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch)
@@ -421,51 +407,40 @@ async def syncwhitelist():
 
 async def syncwhitelistfiles():
     #Kopiere Whitelist in verschiedene Ordner
-    paths = open("whitelist/youtube/paths.txt", "r")
-    for line in paths:
+    for line in zz_init.config.wlytPaths:
         copyfile('whitelist/youtube/whitelist.json', str(line.rstrip()) + 'whitelist.json')
-    paths.close()
 
     #Kopiere Whitelist in verschiedene Ordner
-    paths = open("whitelist/twitch/paths.txt", "r")
-    for line in paths:
+    for line in zz_init.config.wltPaths:
         copyfile('whitelist/twitch/whitelist.json', str(line.rstrip()) + 'whitelist.json')
-    paths.close()
 
     return
 
 async def syncwhitelistpterodactyl(whitelistyoutube, whitelisttwitch):
-    paths = open("whitelist/youtube/pterodactyl.txt", "r")
-    for line in paths:
+    for line in zz_init.config.wlytPterodactyl:
         parts = line.split(" ")
         serverid = parts[0]
         whitelistpath = parts[1]
 
-        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelistyoutube), zz_init.config().get_pterodactyl_apikey())
-    paths.close()
+        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelistyoutube), zz_init.config.main['pterodactyl_apikey'])
 
-    paths = open("whitelist/twitch/pterodactyl.txt", "r")
-    for line in paths:
+    for line in zz_init.config.wltPterodactyl:
         parts = line.split(" ")
         serverid = parts[0]
         whitelistpath = parts[1]
 
-        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelisttwitch), zz_init.config().get_pterodactyl_apikey())
-    paths.close()
+        await pterodactylwritefile(serverid, whitelistpath, json.dumps(whitelisttwitch), zz_init.config.main['pterodactyl_apikey'])
 
 async def pterodactylwritefile(serverid, path, data, apikey):
-    url = zz_init.config().get_pterodactyl_domain() + 'api/client/servers/' + serverid + '/files/write?file='\
+    url = zz_init.config.main['pterodactyl_domain'] + 'api/client/servers/' + serverid + '/files/write?file='\
           + urllib.parse.quote(path)
     requests.post(url, data=data, headers={"Accept": "application/json", "Authorization": "Bearer " + apikey})
 
 async def getmemberid(message, name):
     guild = message.author.guild
     ID = 0
-    for member in guild.members:
-
-    #for member in get_all_members():
-        if member.name == name:
-            ID = member.id
+    if (member := guild.get_member_named(name)) != None:
+        ID = member.id
     return ID
 
 async def checkrole(roles, roleid):
@@ -475,50 +450,23 @@ async def checkrole(roles, roleid):
     return False
 
 async def checkwords(message):
-
-    words = open("blacklist/discord/badwords.txt", "r")
-    for line in words:
-        if str(line.strip()).lower() in message.content.strip().lower():
+    for line in zz_init.config.badwords:
+        if re.match('.*' + re.sub('( *|\n*)', '' , line) + '.*', re.sub('( *|\n*)', '', message.content), re.I):
             return True
-    words.close()
 
     return False
 
 async def addblacklistword(message, arg):
-
-    words = open("blacklist/discord/badwords.txt", "a")
-
-    words.write(arg.strip() + "\n")
-
-    words.close()
-
+    zz_init.config.badwords_add(arg.strip())
     return False
 
 async def removeblacklistword(message, arg):
-
-    newfile = ""
-    words = open("blacklist/discord/badwords.txt", "r")
-    for line in words:
-        if line != arg.strip()+"\n":
-            newfile += line
-    words.close()
-
-    words = open("blacklist/discord/badwords.txt", "w")
-    words.write(newfile)
-
-    words.close()
-
+    zz_init.config.badwords_remove(arg.strip())
 
     return False
 
 async def blacklist():
-
-    file =(open("blacklist/discord/badwords.txt", "r"))
-    content = ""
-    for line in file:
-        content += line
-
-    return content
+    return ''.join(zz_init.config.badwords)
 
 
 #async def is_verified(ctx):
@@ -526,11 +474,11 @@ async def blacklist():
 #    return check
 
 async def dbcommit(sqlcommand, value = None, nofetch = 0):
-    mydb = zz_init.getdb()
+    mydb = zz_init.mydb
     if(not mydb.is_connected()):
         print("Verbindung zur DB verloren...wird reconnected")
         mydb.reconnect(attempts=3, delay=5)
-        mydb = zz_init.getdb()
+        mydb = zz_init.mydb
     mycursor = mydb.cursor()
     if(value):
         mycursor.execute(sqlcommand, value)
@@ -540,11 +488,11 @@ async def dbcommit(sqlcommand, value = None, nofetch = 0):
         return mycursor.fetchall()
 
 async def dbcommitfone(sqlcommand, value = None):
-    mydb = zz_init.getdb()
+    mydb = zz_init.mydb
     if(not mydb.is_connected()):
         print("Verbindung zur DB verloren...wird reconnected")
         mydb.reconnect(attempts=3, delay=5)
-        mydb = zz_init.getdb()
+        mydb = zz_init.mydb
     mycursor = mydb.cursor()
     if(value):
         mycursor.execute(sqlcommand, value)

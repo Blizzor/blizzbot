@@ -2,90 +2,83 @@ import json
 import datetime
 import logging
 import mysql.connector
+import re
 
-class config():
-    def __init__(self):
-        with open('config/config.json') as json_file:
-            jsonstructure = json.load(json_file)
-            for p in jsonstructure['discord']:
-                self.token = p['token']
-                self.IDcategoryvoice = p['IDcategoryvoice']
-                self.IDcategorytext = p['IDcategorytext']
-                self.IDchannelstandard = p['IDchannelstandard']
-                self.IDchannelcommand = p['IDchannelcommand']
-                self.IDchannelverificate = p['IDchannelverificate']
-                self.IDchanneladmin = p['IDchanneladmin']
-                self.IDchannellogs = p['IDchannellogs']
-                self.IDgrpverificate = p['IDgrpverificate']
-                self.IDgrpnotify = p['IDgrpnotify']
-                self.IDgrpYT = p['IDgrpYT']
-                self.IDgrpYTGold = p['IDgrpYTGold']
-                self.IDgrpYTDiamant = p['IDgrpYTDiamant']
-                self.IDgrpMod = p['IDgrpMod']
-                self.ArrayIDgrpsubyoutube = p['ArrayIDgrpsubyoutube']
-                self.ArrayIDgrpsubtwitch = p['ArrayIDgrpsubtwitch']
-                self.ArraynoFilter = p['ArraynoFilter']
-                self.DBhost = p['DBhost']
-                self.DBuser = p['DBuser']
-                self.DBpasswd = p['DBpasswd']
-                self.DBdatabase = p['DBdatabase']
-                self.pterodactyl_domain = p['pterodactyl_domain']
-                self.pterodactyl_apikey = p['pterodactyl_apikey']
+class Config():
+    def __init__(self, static_files, dynamic_files):
+        for filename, alias in static_files:
+            self.readFile(filename, alias)
 
-    def get_token(self):
-        return self.token
-    def get_IDcategoryvoice(self):
-        return self.IDcategoryvoice
-    def get_IDcategorytext(self):
-        return self.IDcategorytext
-    def get_IDchannelstandard(self):
-        return self.IDchannelstandard
-    def get_IDchannelcommand(self):
-        return self.IDchannelcommand
-    def get_IDchannelverificate(self):
-        return self.IDchannelverificate
-    def get_IDchanneladmin(self):
-        return self.IDchanneladmin
-    def get_IDchannellogs(self):
-        return self.IDchannellogs
-    def get_IDgrpverificate(self):
-        return self.IDgrpverificate
-    def get_IDgrpnotify(self):
-        return self.IDgrpnotify
-    def get_IDgrpYT(self):
-        return self.IDgrpYT
-    def get_IDgrpYTGold(self):
-        return self.IDgrpYTGold
-    def get_IDgrpYTDiamant(self):
-        return self.IDgrpYTDiamant
-    def get_IDgrpMod(self):
-        return self.IDgrpMod
-    def get_ArrayIDgrpsubyoutube(self):
-        return self.ArrayIDgrpsubyoutube
-    def get_ArrayIDgrpsubtwitch(self):
-        return self.ArrayIDgrpsubtwitch
-    def get_ArraynoFilter(self):
-        return self.ArraynoFilter
-    def get_DBhost(self):
-        return self.DBhost
-    def get_DBuser(self):
-        return self.DBuser
-    def get_DBpasswd(self):
-        return self.DBpasswd
-    def get_DBdatabase(self):
-        return self.DBdatabase
-    def get_pterodactyl_domain(self):
-        return self.pterodactyl_domain
-    def get_pterodactyl_apikey(self):
-        return self.pterodactyl_apikey
+        for filename, alias in dynamic_files:
+            ending = splitted[-1] if len( (splitted := filename.split('.')) ) > 1 else ''
+
+            self.readFile(filename, alias, ending)
+
+            self.__setattr__(alias + "_add", (lambda line : self.appendLine(filename, alias, line)))
+            self.__setattr__(alias + "_remove", (lambda line : self.removeLine(filename, alias, line)))
+
+    def appendLine(self, filename, alias, line):
+        self.__getattribute__(alias).append(self.removeNewline(line))
+
+        self.appendLine_(filename, line)
+
+    def appendLine_(self, filename, line):
+        with open(filename, 'a') as open_file:
+            open_file.write(line+'\n' if len(line) > 0 and line[-1] != '\n' else line)
+
+    def removeLine(self, filename, alias, line):
+        try:
+            self.__getattribute__(alias).remove(self.removeNewline(line))
+
+        except:
+            pass
+
+        self.removeLine_(filename, alias)
+
+    def removeLine_(self, filename, alias):
+        with open(filename, 'w') as open_file:
+            for line in self.__getattribute__(alias):
+                open_file.write(line+'\n' if len(line) > 0 and line[-1] != '\n' else line)
+
+    def readFile(self, filename, alias, ending=None):
+        if ending == None:
+            ending = splitted[-1] if len( (splitted := filename.split('.')) ) > 1 else ''
+
+        with open(filename, 'r') as open_file:
+            if ending == "json":
+                try:
+                    self.__setattr__(alias, json.load(open_file))
+                except:
+                    return
+            else:
+                    self.__setattr__(alias, [ self.removeNewline(line) for line in open_file ])
+
+    def removeNewline(self, text):
+        return text[:-1] if len(text) > 0 and text[-1] == "\n" else text
+
+config = Config(
+    [
+        ('config/config.json', 'main'),
+        ('welcome/discord/welcome.txt', 'welcome_messages'),
+        ('whitelist/youtube/paths.txt', 'wlytPaths'),
+        ('whitelist/twitch/paths.txt', 'wltPaths'),
+        ('whitelist/youtube/pterodactyl.txt', 'wlytPterodactyl'),
+        ('whitelist/twitch/pterodactyl.txt', 'wltPterodactyl')
+    ],
+    [
+        ('blacklist/discord/badwords.txt', 'badwords')
+    ]
+)
 
 mydb = mysql.connector.connect(
-    host=config().get_DBhost(),
-    user=config().get_DBuser(),
-    passwd=config().get_DBpasswd(),
-    database=config().get_DBdatabase(),
+    host=config.main['DBhost'],
+    user=config.main['DBuser'],
+    passwd=config.main['DBpasswd'],
+    database=config.main['DBdatabase'],
     auth_plugin='mysql_native_password'
 )
+
+#welcome_messages_count = len(welcome_messages)
 
 def logger():
     day = datetime.datetime.now()
@@ -96,6 +89,3 @@ def logger():
     handler = logging.FileHandler(filename=logfile, encoding='utf-8', mode='w')
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     logger.addHandler(handler)
-
-def getdb():
-    return(mydb)

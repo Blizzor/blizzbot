@@ -1,37 +1,37 @@
-Hallo Name
-WILLKOMMEN Name
-Was geht aaaaab Name
-Willkommen auf diesem wunderbaren Discord Name
-Hallo und Willkommen Name
-Haaaaaaaaaaaaaaaallo und Willkommen Name
-Willkommen bei den Freaks Name
-Name Name Name Name Name
-Na du Name, kennst du Blizzor? Ich denke schon!
-Schon Mal von Blizzor gehört? Nein? Was machst du dann hier, Name? 
-Willkommen Name. Sie haben soeben das Ziel erreicht, den besten Discord-Server EUW zu finden!
-Huch? Was ist denn das bitte? Name? Ein Mensch?
-Geil. Was geht ab Name?
-Herzlich Willkommen in der Blizzunity Name!
-Willkommen Sie sind Name.
-Friede, Freude, Name
-Schnick, Schnack, Name.
-Achtung Achtung! Soeben ist ein Name gespawnt!
-Name setzt Aquaknarre ein! Das war sehr effektiv!
-Name setzt Serverjoin ein! Huch. Bin ich hier richtig?
-Error. Name404.
-Console.Writeline(Name joined the Server)
-print('Name ist dem Server beigetreten!')
-Unser neuestes Servermitglied ist: Name!
-Name hat es so eben durch die Verifizierung geschafft!
-Diesem Server ist gerade Name beigetreten.
-Wir begrüßen dich in der Blizzunity Name!
-Willkommen und Haaaaaaaaallo Name
-Ist es der echte Name?
-Ist Name ein Bot? finden wir es heraus!
-Ein wildes Name
-Willkommen in der besten Community von Blizzor Name
-Uiii ein cooles neues Name
-Name hat es geschafft und ist in nun in der neuen Zeitzone
-Wie verhext! ein Name wurde beschworen
-Name fell from a high place
-Krass der die das Name ist wirklich hier!
+Hallo **{memberName}**
+WILLKOMMEN **{memberName}**
+Was geht aaaaab **{memberName}**
+Willkommen auf diesem wunderbaren Discord **{memberName}**
+Hallo und Willkommen **{memberName}**
+Haaaaaaaaaaaaaaaallo und Willkommen **{memberName}**
+Willkommen bei den Freaks **{memberName}**
+**{memberName}** **{memberName}** **{memberName}** **{memberName}** **{memberName}**
+Na du **{memberName}**, kennst du Blizzor? Ich denke schon!
+Schon Mal von Blizzor gehört? Nein? Was machst du dann hier, **{memberName}**?
+Willkommen **{memberName}**. Sie haben soeben das Ziel erreicht, den besten Discord-Server EUW zu finden!
+Huch? Was ist denn das bitte? **{memberName}**? Ein Mensch?
+Geil. Was geht ab **{memberName}**?
+Herzlich Willkommen in der Blizzunity **{memberName}**!
+Willkommen Sie sind **{memberName}**.
+Friede, Freude, **{memberName}**
+Schnick, Schnack, **{memberName}**.
+Achtung Achtung! Soeben ist ein **{memberName}** gespawnt!
+**{memberName}** setzt Aquaknarre ein! Das war sehr effektiv!
+**{memberName}** setzt Serverjoin ein! Huch. Bin ich hier richtig?
+Error. **{memberName}**404.
+Console.Writeline(**{memberName}** joined the Server)
+print('**{memberName}** ist dem Server beigetreten!')
+Unser neuestes Servermitglied ist: **{memberName}**!
+**{memberName}** hat es so eben durch die Verifizierung geschafft!
+Diesem Server ist gerade **{memberName}** beigetreten.
+Wir begrüßen dich in der Blizzunity **{memberName}**!
+Willkommen und Haaaaaaaaallo **{memberName}**
+Ist es der echte **{memberName}**?
+Ist **{memberName}** ein Bot? finden wir es heraus!
+Ein wildes **{memberName}**
+Willkommen in der besten Community von Blizzor **{memberName}**
+Uiii ein cooles neues **{memberName}**
+**{memberName}** hat es geschafft und ist in nun in der neuen Zeitzone
+Wie verhext! ein **{memberName}** wurde beschworen
+**{memberName}** fell from a high place
+Krass der die das **{memberName}** ist wirklich hier!
