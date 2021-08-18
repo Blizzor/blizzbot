@@ -18,6 +18,7 @@ intents.reactions = True
 intents.members = True
 intents.voice_states = True
 intents.emojis = True
+intents.guilds = True
 
 zz_init.logger()
 
@@ -287,5 +288,4 @@ async def on_message_delete(message):
 #async def on_error(event):
 #    channel = discord.utils.get(bot.guild.channels, id='IDchannellogs')
 #    channel.send(event)
-
-bot.run(token)
+bot.run(zz_init.config.main['token'])

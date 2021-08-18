@@ -70,13 +70,13 @@ config = Config(
     ]
 )
 
-#mydb = mysql.connector.connect(
-#    host=config.main['DBhost'],
-#    user=config.main['DBuser'],
-#    passwd=config.main['DBpasswd'],
-#    database=config.main['DBdatabase'],
-#    auth_plugin='mysql_native_password'
-#)
+mydb = mysql.connector.connect(
+    host=config.main['DBhost'],
+    user=config.main['DBuser'],
+    passwd=config.main['DBpasswd'],
+    database=config.main['DBdatabase'],
+    auth_plugin='mysql_native_password'
+)
 
 #welcome_messages_count = len(welcome_messages)
 
