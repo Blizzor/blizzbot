@@ -1,4 +1,4 @@
-mydbimport discord
+import discord
 import requests
 import json
 import math
