@@ -9,15 +9,20 @@ IDchannelverificate = zz_init.config().get_IDchannelverificate()
 IDgrpverificate = zz_init.config().get_IDgrpverificate()
 IDgrpnotify = zz_init.config().get_IDgrpnotify()
 
+
+
 class MembersCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
 
     @commands.command(aliases=["hilfe"])
     @commands.guild_only()
     async def help(self, ctx):
         if ctx.message.channel.id == IDchannelcommand:
             await zz_functions.cmndhelp(ctx.message)
+            
+
 
     @commands.command()
     @commands.guild_only()

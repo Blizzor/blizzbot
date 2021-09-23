@@ -22,6 +22,7 @@ IDchannelcommand = zz_init.config().get_IDchannelcommand()
 IDchannelverificate = zz_init.config().get_IDchannelverificate()
 IDchanneladmin = zz_init.config().get_IDchanneladmin()
 IDchannellogs = zz_init.config().get_IDchannellogs()
+IDchannelanfrage = zz_init.config().get_IDchannelanfrage()
 IDgrpverificate = zz_init.config().get_IDgrpverificate()
 IDgrpnotify = zz_init.config().get_IDgrpnotify()
 IDgrpYT = zz_init.config().get_IDgrpYT()
@@ -64,10 +65,12 @@ async def anfrage(ctx):
     if ctx.message.channel.id == IDchannelcommand:
         Nachricht = await zz_functions.question(ctx.message,bot)
 
-        channels = (ctx.author.guild.text_channels)
-        for j in channels:
-            if j.name == "anfragen": # Wenn Kategory richtig ist
-                await j.send(Nachricht)
+        channel = bot.get_channel(IDchannelanfrage)
+        await channel.send(Nachricht)
+        #channels = (ctx.author.guild.text_channels)
+        #for j in channels:
+            #if j.name == "anfragen": # Wenn Kategory richtig ist
+                #await j.send(Nachricht)
 
 @bot.event
 async def on_message(message):
