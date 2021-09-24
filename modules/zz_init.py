@@ -23,6 +23,7 @@ class config():
                 self.IDgrpYTGold = p['IDgrpYTGold']
                 self.IDgrpYTDiamant = p['IDgrpYTDiamant']
                 self.IDgrpMod = p['IDgrpMod']
+                self.IDguildCommunity = p['IDguildCommunity']
                 self.ArrayIDgrpsubyoutube = p['ArrayIDgrpsubyoutube']
                 self.ArrayIDgrpsubtwitch = p['ArrayIDgrpsubtwitch']
                 self.ArraynoFilter = p['ArraynoFilter']
@@ -63,6 +64,8 @@ class config():
         return self.IDgrpYTDiamant
     def get_IDgrpMod(self):
         return self.IDgrpMod
+    def get_IDguildCommunity(self):
+        return self.IDguildCommunity
     def get_ArrayIDgrpsubyoutube(self):
         return self.ArrayIDgrpsubyoutube
     def get_ArrayIDgrpsubtwitch(self):

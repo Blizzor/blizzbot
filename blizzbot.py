@@ -29,6 +29,7 @@ IDgrpYT = zz_init.config().get_IDgrpYT()
 IDgrpYTGold = zz_init.config().get_IDgrpYTGold()
 IDgrpYTDiamant = zz_init.config().get_IDgrpYTDiamant()
 IDgrpMod = zz_init.config().get_IDgrpMod()
+IDguildCommunity = zz_init.config().get_IDguildCommunity()
 ArrayIDgrpsubyoutube = zz_init.config().get_ArrayIDgrpsubyoutube()
 ArrayIDgrpsubtwitch = zz_init.config().get_ArrayIDgrpsubtwitch()
 ArraynoFilter = zz_init.config().get_ArraynoFilter()
@@ -167,7 +168,7 @@ async def on_member_remove(member):
 @bot.event
 async def on_member_update(before,after):
 
-    if(before.roles != after.roles):
+    if(before.roles != after.roles and before.guild.id == IDguildCommunity):
 
         mydb = zz_init.getdb()
         mycursor = mydb.cursor()
