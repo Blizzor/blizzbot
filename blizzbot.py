@@ -199,8 +199,8 @@ async def on_member_update(before,after):
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-    #print(before.channel)
-    #print(after.channel)
+    print(before)
+    print(after)
     rightguild = False
 
     if hasattr(before, 'guild'):
