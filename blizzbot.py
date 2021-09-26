@@ -199,18 +199,9 @@ async def on_member_update(before,after):
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-    print(before)
-    print(after)
-    rightguild = False
 
-    if hasattr(before, 'guild'):
-        if(before.guild.id == IDguildCommunity):
-            rightguild = True
-    if hasattr(after, 'guild'):
-        if(after.guild.id == IDguildCommunity):
-            rightguild = True
 
-    if(before.channel != after.channel and rightguild): #Wenn Änderung durch Channelwechsel stattfindet
+    if(before.channel != after.channel and member.guild.id == IDguildCommunity): #Wenn Änderung durch Channelwechsel stattfindet
         tcategory = None
         for n in member.guild.categories:
             if n.id == IDcategorytext:
