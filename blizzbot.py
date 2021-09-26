@@ -203,10 +203,10 @@ async def on_voice_state_update(member, before, after):
     #print(after.channel)
     rightguild = False
 
-    if(before.guild):
+    if hasattr(before, 'guild'):
         if(before.guild.id == IDguildCommunity):
             rightguild = True
-    if(after.guild):
+    if hasattr(after, 'guild'):
         if(after.guild.id == IDguildCommunity):
             rightguild = True
 
