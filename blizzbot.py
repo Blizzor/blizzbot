@@ -201,7 +201,16 @@ async def on_member_update(before,after):
 async def on_voice_state_update(member, before, after):
     #print(before.channel)
     #print(after.channel)
-    if(before.channel != after.channel and (before.guild.id == IDguildCommunity or after.guild.id == IDguildCommunity)): #Wenn Änderung durch Channelwechsel stattfindet
+    rightguild = False
+
+    if(before.guild.id):
+        if(before.guild.id == IDguildCommunity):
+            rightguild = True
+    if(after.guild.id):
+        if(after.guild.id == IDguildCommunity):
+            rightguild = True
+
+    if(before.channel != after.channel and rightguild): #Wenn Änderung durch Channelwechsel stattfindet
         tcategory = None
         for n in member.guild.categories:
             if n.id == IDcategorytext:
