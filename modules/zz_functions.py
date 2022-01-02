@@ -15,11 +15,30 @@ ArrayIDgrpsubyoutube = zz_init.config().get_ArrayIDgrpsubyoutube()
 ArrayIDgrpsubtwitch = zz_init.config().get_ArrayIDgrpsubtwitch()
 
 async def cmndhelp(message):
-    await message.channel.send("""```
-!mc [Name] - Registriere deinen Minecraft-Account
-!mcname [Name] - Gibt deinen aktuellen Minecraft-Account wieder
-!rank [Name] - Gibt Erfahrung wieder
-!anfrage - Schreibe dem Bot eine Anfrage, die direkt an die Moderatoren privat weitergeleitet werden```""")
+    help_embed=discord.Embed(title='''**__Der Bot kann folgende Befehle__**''', 
+                        color=0xEDBC5D)
+    embed.add_field(name="!mc [Name]", 
+                    value='''Registriert deinen Minecraft-Account''', 
+                    inline=False)
+    embed.add_field(name="!mcname", 
+                    value='''Gibt den auf deinen Account registrierten Minecraft Namen wieder''', 
+                    inline=False)
+    embed.add_field(name="!rang [Name*]", 
+                    value='''Gibt Erfahrung und Rang des Nutzers wieder''', 
+                    inline=False)
+    embed.add_field(name="!ranking", 
+                    value='''Gibt die aktuellen Top10 der Rangliste wieder''', 
+                    inline=False)
+    embed.add_field(name="!anfrage", 
+                    value='''Sendet eine Anfrage, die direkt an die Moderatoren weitergeleitet wird''', 
+                    inline=False)
+    #temporarily removed because the "Notify" role is not used
+    #embed.add_field(name="!notify",
+    #                value='''Fügt dir die "Notify"-Rolle hinzu oder entfernt sie. Mit ihr wirst du bei Nachrichten in #neuigkeiten, #videos und #streams gepingt''',
+    #                inline=False)
+    embed.set_footer(text="*Optionaler Parameter")
+await ctx.send(embed=embed)
+    await message.channel.send(embed=help_embed)
     return
 
 async def newjoin(member):
