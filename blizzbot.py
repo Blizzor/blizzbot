@@ -84,12 +84,25 @@ async def on_message(message):
                     filter = False
             if filter:
                 await message.delete()
+                await message.author.create_dm()
+                Nachricht = f"""**Du hast versucht einen Link auf Blizzors Community Discord zu senden.**
+Da das Senden von Links nur YouTube Mitgliedern, Twitch Subscribern oder Blizzcoinhordern (oder höher) erlaubt ist wurde die Nachricht gelöscht.
+Das Umgehen der Sperre ist verboten, wenn es wichtig ist dass der Link dennoch gesendet wird schreibe bitte einem Moderator der / einer Moderatorin die den Link für dich senden kann.
+Betroffene Nachricht:
+```{message.content}```"""
+                await message.author.dm_channel.send(Nachricht)
+                
 
     if message.guild and message.author != bot.user and message.channel.id != IDchanneladmin:
         if await zz_functions.checkwords(message):
             await message.delete()
             await message.author.create_dm()
-            await message.author.dm_channel.send("Ihre Nachricht mit dem Inhalt **" + message.content + "** wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
+            Nachricht = f"""**Du hast versucht eine Nachricht auf Blizzors Community Discord zu senden.**
+Die Nachricht wurde gelöscht da sich in ihr eines oder mehrere Wörter auf der Blacklist befanden.
+Das Umgehen der Sperre ist verboten, melde dich bei Fragen an einen Moderator / eine Moderatorin.
+Betroffene Nachricht:
+```{message.content}```"""
+            await message.author.dm_channel.send(Nachricht)
 
     if message.channel.id == IDchannelverificate and message.content != "!zz":
         await message.delete()
@@ -135,9 +148,9 @@ async def on_raw_reaction_add(payload):
 
 @bot.event
 async def on_member_join(member):
-    Nachricht = """Willkommen auf Blizzor's Community Server.
-    Damit du auf dem Server freigeschalten wirst, musst du den Befehl !zz verwenden.
-    Bitte gib diesen Befehl im Channel #freischalten ein."""
+    Nachricht = """**Willkommen auf Blizzors Community Server.**
+Damit du auf dem Server freigeschalten wirst, musst du den Befehl `!zz` verwenden.
+Bitte gib diesen Befehl im Channel #freischalten ein."""
     await member.create_dm()
     await member.dm_channel.send(content=Nachricht)
     #await zz_functions.newjoin(member)
