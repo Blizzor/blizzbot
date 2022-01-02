@@ -84,15 +84,18 @@ async def on_message(message):
                     filter = False
             if filter:
                 await message.delete()
+                delete_reason = "Nachricht enthielt Link"
 
     if message.guild and message.author != bot.user and message.channel.id != IDchanneladmin:
         if await zz_functions.checkwords(message):
+            delete_reason = "Nachricht enthielt Wort aus der Blacklist"
             await message.delete()
             await message.author.create_dm()
             await message.author.dm_channel.send("Ihre Nachricht mit dem Inhalt **" + message.content + "** wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.")
 
     if message.channel.id == IDchannelverificate and message.content != "!zz":
         await message.delete()
+        delete_reason = "!zz-message in #freischalten"
 
     if message.author != bot.user and message.guild and message.channel.id != IDchannelcommand and message.channel.category_id != IDcategorytext:
         await zz_functions.getexp(message)
@@ -291,6 +294,10 @@ async def on_message_delete(message):
             embed.add_field(name="Inhalt", value=message.content, inline=False)
         else:
             embed.add_field(name="Inhalt", value="Inhalt nicht auslesbar", inline=False)
+        #only when deleted by bot himself
+        if(delete_reason):
+          embed.add_field(name="Grund", value="delete_reason", inline=False)
+          delete_reason = None
 
         await channel.send(embed=embed)
 
