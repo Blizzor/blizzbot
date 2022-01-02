@@ -292,7 +292,9 @@ async def on_message_delete(message):
         else:
             embed.add_field(name="Inhalt", value="Inhalt nicht auslesbar", inline=False)
 
-        await channel.send(embed=embed)
+        channelID = message.channel.id
+        if not ((channnelID is IDchannelverificate) and (message.content is "!zz")) 
+            await channel.send(embed=embed)
 
     return
 
